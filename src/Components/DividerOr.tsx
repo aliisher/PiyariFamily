@@ -6,9 +6,13 @@ import { Fonts } from '../Constant/Fonts';
 import { Strings } from '../Constant/Strings';
 import { hp, wp } from '../Functions/responsive';
 
-const DividerOr = () => {
+type Props = {
+  compact?: boolean;
+};
+
+const DividerOr = ({ compact = false }: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, compact && styles.containerCompact]}>
       <View style={styles.line} />
       <Text style={styles.text}>{Strings.or}</Text>
       <View style={styles.line} />
@@ -21,6 +25,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: hp('2.5%'),
+  },
+  containerCompact: {
+    marginVertical: hp('1%'),
   },
   line: {
     flex: 1,

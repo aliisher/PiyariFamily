@@ -56,7 +56,8 @@ const ResendCodeSection = ({ initialSeconds = 45, onResend }: Props) => {
         <Text
           style={[styles.resendLink, !canResend && styles.resendDisabled]}
           onPress={handleResend}
-          suppressHighlighting>
+          suppressHighlighting
+        >
           Resend
         </Text>
       </Text>
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontSize: FontSizes.bodySmall,
-    color: Colors.textLight,
+    color: Colors.textSecondary,
     fontFamily: Fonts.regular,
     marginLeft: wp('1.6%'),
   },

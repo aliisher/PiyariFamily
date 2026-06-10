@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Images } from '../Assets';
 import { AuthStyles } from '../Constant/AuthStyles';
 import { Colors } from '../Constant/Colors';
 import { fs, hp } from '../Functions/responsive';
@@ -24,10 +24,10 @@ const BackButton = ({ onPress, variant = 'default' }: Props) => {
       onPress={onPress}
       activeOpacity={0.8}
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-      <Icon
-        name="chevron-left"
-        size={fs(22)}
-        color={isGray ? Colors.iconMuted : Colors.primary}
+      <Image
+        source={Images.backArrowIcon}
+        style={styles.icon}
+        resizeMode="contain"
       />
     </TouchableOpacity>
   );
@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
   buttonGray: {
     borderColor: Colors.border,
     backgroundColor: Colors.white,
+  },
+  icon: {
+    width: fs(22),
+    height: fs(22),
   },
 });
 

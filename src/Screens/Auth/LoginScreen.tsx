@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthFooter from '../../Components/AuthFooter';
@@ -29,6 +31,7 @@ type Props = {
 };
 
 const LoginScreen = ({ navigation }: Props) => {
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,85 +50,99 @@ const LoginScreen = ({ navigation }: Props) => {
 
   return (
     <AuthBackground>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAwareScrollView
-          contentContainerStyle={styles.scroll}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          enableOnAndroid
-          bounces={false}>
-          <AuthHeader />
+      <KeyboardAvoidingView
+        style={styles.root}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View
+            style={[
+              styles.container,
+              { paddingBottom: Math.max(insets.bottom, hp('2%')) },
+            ]}
+          >
+            <View style={styles.content}>
+              <AuthHeader />
 
-          <View style={styles.formSection}>
-            <Text style={styles.title}>{Strings.welcomeBack}</Text>
-            <Text style={styles.subtitle}>{Strings.loginSubtitle}</Text>
+              <View style={styles.formSection}>
+                <Text style={styles.title}>{Strings.welcomeBack}</Text>
+                <Text style={styles.subtitle}>{Strings.loginSubtitle}</Text>
 
-            <AuthInput
-              label={Strings.emailLabel}
-              iconName="email-outline"
-              placeholder={Strings.emailPlaceholder}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+                <AuthInput
+                  label={Strings.emailLabel}
+                  iconName="email-outline"
+                  placeholder={Strings.emailPlaceholder}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
 
-            <AuthInput
-              label={Strings.passwordLabel}
-              iconName="lock-outline"
-              placeholder={Strings.passwordPlaceholder}
-              value={password}
-              onChangeText={setPassword}
-              showToggle
-              secureTextEntry
-            />
+                <AuthInput
+                  label={Strings.passwordLabel}
+                  iconName="lock-outline"
+                  placeholder={Strings.passwordPlaceholder}
+                  value={password}
+                  onChangeText={setPassword}
+                  showToggle
+                  secureTextEntry
+                />
 
-            <TouchableOpacity
-              style={styles.forgotBtn}
-              activeOpacity={0.7}
-              onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.forgotText}>{Strings.forgotPassword}</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.forgotBtn}
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate('ForgotPassword')}
+                >
+                  <Text style={styles.forgotText}>
+                    {Strings.forgotPassword}
+                  </Text>
+                </TouchableOpacity>
 
-            <PrimaryButton
-              title={Strings.logIn}
-              onPress={handleLogin}
-              loading={loading}
-            />
+                <PrimaryButton
+                  title={Strings.logIn}
+                  onPress={handleLogin}
+                  loading={loading}
+                />
 
-            <DividerOr />
+                <DividerOr />
 
-            <SocialButton
-              provider="google"
-              title={Strings.continueGoogle}
-              onPress={() => Toast.show('Google login coming soon')}
-            />
-            <SocialButton
-              provider="apple"
-              title={Strings.continueApple}
-              onPress={() => Toast.show('Apple login coming soon')}
+                <SocialButton
+                  provider="google"
+                  title={Strings.continueGoogle}
+                  onPress={() => Toast.show('Google login coming soon')}
+                />
+                <SocialButton
+                  provider="apple"
+                  title={Strings.continueApple}
+                  onPress={() => Toast.show('Apple login coming soon')}
+                />
+              </View>
+            </View>
+
+            <AuthFooter
+              prefix={Strings.noAccount}
+              linkText={Strings.createAccount}
+              onPress={() => navigation.navigate('SignUp')}
             />
           </View>
-
-          <AuthFooter
-            prefix={Strings.noAccount}
-            linkText={Strings.createAccount}
-            onPress={() => navigation.navigate('SignUp')}
-          />
-
-          <View style={styles.bottomSpacer} />
-        </KeyboardAwareScrollView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </AuthBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  scroll: {
-    flexGrow: 1,
+  root: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
     paddingHorizontal: AuthStyles.horizontalPadding,
-    paddingBottom: hp('2%'),
+    justifyContent: 'space-between',
+  },
+  content: {
+    flexShrink: 1,
   },
   formSection: {
     width: '100%',
@@ -140,7 +157,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: FontSizes.body,
     color: Colors.textSecondary,
-    marginBottom: hp('3%'),
+    marginBottom: hp('2%'),
     fontFamily: Fonts.regular,
     lineHeight: hp('2.5%'),
   },
@@ -153,9 +170,6 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.body,
     color: Colors.gold,
     fontFamily: Fonts.medium,
-  },
-  bottomSpacer: {
-    height: hp('2%'),
   },
 });
 

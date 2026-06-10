@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { FontSizes } from '../Constant/AuthStyles';
 import { Colors } from '../Constant/Colors';
 import { Fonts } from '../Constant/Fonts';
@@ -9,15 +9,17 @@ type Props = {
   prefix: string;
   linkText: string;
   onPress: () => void;
+  style?: ViewStyle;
 };
 
-const AuthFooter = ({ prefix, linkText, onPress }: Props) => {
+const AuthFooter = ({ prefix, linkText, onPress, style }: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.prefix}>{prefix} </Text>
       <TouchableOpacity
         onPress={onPress}
-        hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}>
+        hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
+      >
         <Text style={styles.link}>{linkText}</Text>
       </TouchableOpacity>
     </View>
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hp('0.6%'),
+    marginTop: hp('1.6%'),
     flexWrap: 'wrap',
   },
   prefix: {

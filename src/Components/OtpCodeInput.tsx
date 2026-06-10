@@ -39,7 +39,8 @@ const OtpCodeInput = ({ value, onChangeText }: Props) => {
         <View
           key={index}
           style={[styles.cell, isFocused && styles.focusCell]}
-          onLayout={getCellOnLayoutHandler(index)}>
+          onLayout={getCellOnLayoutHandler(index)}
+        >
           <Text style={styles.cellText}>
             {symbol || (isFocused ? <Cursor /> : null)}
           </Text>

@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   hintRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: hp('-1.2%'),
+    marginTop: wp('1%'),
   },
   hintIcon: {
     marginRight: wp('1.5%'),

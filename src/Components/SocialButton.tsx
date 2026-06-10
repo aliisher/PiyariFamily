@@ -1,5 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Images } from '../Assets';
 import { AuthStyles, FontSizes } from '../Constant/AuthStyles';
@@ -13,12 +20,20 @@ type Props = {
   provider: Provider;
   title: string;
   onPress: () => void;
+  compact?: boolean;
+  style?: ViewStyle;
 };
 
-const SocialButton = ({ provider, title, onPress }: Props) => {
+const SocialButton = ({
+  provider,
+  title,
+  onPress,
+  compact = false,
+  style,
+}: Props) => {
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={[styles.button, compact && styles.buttonCompact, style]}
       onPress={onPress}
       activeOpacity={0.88}>
       <View style={styles.iconWrap}>
@@ -44,6 +59,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.socialButtonBg,
     height: AuthStyles.buttonHeight,
     marginBottom: hp('1.5%'),
+  },
+  buttonCompact: {
+    height: hp('5.4%'),
+    marginBottom: hp('0.7%'),
   },
   iconWrap: {
     width: wp('6.4%'),

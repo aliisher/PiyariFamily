@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {
+  Image,
+  ImageSourcePropType,
   StyleSheet,
   Text,
   TextInput,
@@ -15,31 +17,45 @@ import { fs, hp, wp } from '../Functions/responsive';
 
 type Props = TextInputProps & {
   label: string;
-  iconName: string;
+  iconName?: string;
+  iconSource?: ImageSourcePropType;
   showToggle?: boolean;
   iconColor?: string;
+  compact?: boolean;
 };
 
 const AuthInput = ({
   label,
   iconName,
+  iconSource,
   showToggle = false,
   iconColor = Colors.primary,
+  compact = false,
   secureTextEntry,
   ...rest
 }: Props) => {
   const [hidden, setHidden] = useState(secureTextEntry ?? false);
 
   return (
-    <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputRow}>
-        <Icon
-          name={iconName}
-          size={fs(20)}
-          color={iconColor}
-          style={styles.leftIcon}
-        />
+    <View style={[styles.wrapper, compact && styles.wrapperCompact]}>
+      <Text style={[styles.label, compact && styles.labelCompact]}>
+        {label}
+      </Text>
+      <View style={[styles.inputRow, compact && styles.inputRowCompact]}>
+        {iconSource ? (
+          <Image
+            source={iconSource}
+            style={[styles.leftIcon, styles.iconImage]}
+            resizeMode="contain"
+          />
+        ) : (
+          <Icon
+            name={iconName!}
+            size={fs(20)}
+            color={iconColor}
+            style={styles.leftIcon}
+          />
+        )}
         <TextInput
           style={styles.input}
           placeholderTextColor={Colors.placeholder}
@@ -50,7 +66,8 @@ const AuthInput = ({
           <TouchableOpacity
             onPress={() => setHidden(prev => !prev)}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.eyeBtn}>
+            style={styles.eyeBtn}
+          >
             <Icon
               name={hidden ? 'eye-off-outline' : 'eye-outline'}
               size={fs(20)}
@@ -65,13 +82,19 @@ const AuthInput = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: hp('2.2%'),
+    marginBottom: wp('2.2%'),
+  },
+  wrapperCompact: {
+    marginBottom: wp('1.2%'),
   },
   label: {
     fontSize: FontSizes.body,
     color: Colors.label,
     marginBottom: hp('1%'),
     fontFamily: Fonts.medium,
+  },
+  labelCompact: {
+    marginBottom: hp('0.4%'),
   },
   inputRow: {
     flexDirection: 'row',
@@ -83,12 +106,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('3.7%'),
     height: AuthStyles.inputHeight,
   },
+  inputRowCompact: {
+    height: hp('5.4%'),
+  },
   leftIcon: {
     marginRight: wp('2.7%'),
   },
+  iconImage: {
+    width: fs(20),
+    height: fs(20),
+  },
   input: {
     flex: 1,
-    fontSize: FontSizes.bodyLarge,
+    fontSize: FontSizes.body,
     color: Colors.text,
     fontFamily: Fonts.regular,
     paddingVertical: 0,

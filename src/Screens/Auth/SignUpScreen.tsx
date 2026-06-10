@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
+import { Images } from '../../Assets';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthFooter from '../../Components/AuthFooter';
 import AuthInput from '../../Components/AuthInput';
@@ -104,7 +105,7 @@ const SignUpScreen = ({ navigation }: Props) => {
 
             <AuthInput
               label={Strings.confirmPasswordLabel}
-              iconName="shield-check-outline"
+              iconSource={Images.confirmPasswordIcon}
               placeholder={Strings.confirmPasswordPlaceholder}
               value={confirmPassword}
               onChangeText={setConfirmPassword}

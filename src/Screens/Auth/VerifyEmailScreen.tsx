@@ -24,6 +24,7 @@ import { hp, wp } from '../../Functions/responsive';
 type Props = {
   navigation: {
     goBack: () => void;
+    replace: (screen: string) => void;
   };
 };
 
@@ -40,6 +41,7 @@ const VerifyEmailScreen = ({ navigation }: Props) => {
     setTimeout(() => {
       setLoading(false);
       Toast.show('Email verified successfully');
+      navigation.replace('Login');
     }, 1000);
   };
 

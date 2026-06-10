@@ -3,6 +3,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ImageSourcePropType,
   NativeScrollEvent,
   NativeSyntheticEvent,
   StatusBar,
@@ -26,7 +27,8 @@ import { hp, wp } from '../../Functions/responsive';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type Feature = {
-  iconName: string;
+  iconName?: string;
+  iconSource?: ImageSourcePropType;
   label: string;
 };
 
@@ -50,9 +52,9 @@ const SLIDES: Slide[] = [
     title: Strings.onboardingTitle1,
     subtitle: Strings.onboardingSubtitle1,
     features: [
-      { iconName: 'shield-check', label: Strings.onboardingVerified },
-      { iconName: 'account-group-outline', label: Strings.onboardingMillions },
-      { iconName: 'lock-outline', label: Strings.onboardingPrivate },
+      { iconSource: Images.verifiedIcon, label: Strings.onboardingVerified },
+      { iconSource: Images.millionsIcon, label: Strings.onboardingMillions },
+      { iconSource: Images.privateIcon, label: Strings.onboardingPrivate },
     ],
   },
   {
@@ -122,6 +124,7 @@ const OnboardingScreen = ({ navigation }: Props) => {
           <OnboardingFeatureCard
             key={feature.label}
             iconName={feature.iconName}
+            iconSource={feature.iconSource}
             label={feature.label}
           />
         ))}
