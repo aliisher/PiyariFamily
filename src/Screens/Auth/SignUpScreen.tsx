@@ -31,13 +31,20 @@ type Props = {
 const SignUpScreen = ({ navigation }: Props) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSignUp = () => {
-    if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
+    if (
+      !fullName.trim() ||
+      !email.trim() ||
+      !phoneNumber.trim() ||
+      !password ||
+      !confirmPassword
+    ) {
       Toast.show('Please fill in all fields');
       return;
     }
@@ -91,6 +98,15 @@ const SignUpScreen = ({ navigation }: Props) => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+            />
+
+            <AuthInput
+              label={Strings.phoneNumberLabel}
+              iconName="phone-outline"
+              placeholder={Strings.phoneNumberPlaceholder}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
             />
 
             <AuthInput

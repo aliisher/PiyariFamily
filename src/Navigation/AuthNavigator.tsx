@@ -13,6 +13,7 @@ import {
   SetNewPasswordScreen,
   PasswordResetSuccessScreen,
 } from '../Screens/Auth';
+import MainTabNavigator from './MainTabNavigator';
 
 export type AuthStackParamList = {
   Splash: undefined;
@@ -25,6 +26,7 @@ export type AuthStackParamList = {
   CodeVerified: undefined;
   SetNewPassword: undefined;
   PasswordResetSuccess: undefined;
+  Main: undefined;
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -50,6 +52,11 @@ const AuthNavigator = () => {
         <Stack.Screen
           name="PasswordResetSuccess"
           component={PasswordResetSuccessScreen}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainTabNavigator}
+          options={{ animation: 'fade' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

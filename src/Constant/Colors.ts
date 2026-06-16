@@ -23,4 +23,11 @@ export const Colors = {
   focusBorder: '#E8889A',
   backButtonPink: '#FFCDD9',
   iconMuted: '#9E9E9E',
+  badgeVerified: '#FFE8EE',
+  tabActiveBg: '#FFF0F3',
+  notificationBg: '#FFF5F7',
+  cardOverlay: 'rgba(0, 0, 0, 0.45)',
+  tagOverlay: 'rgba(255, 255, 255, 0.22)',
+  suggestedTagBg: '#FFF0F3',
+  redish: '#EC003F',
 };

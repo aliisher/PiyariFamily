@@ -27,13 +27,14 @@ import { hp } from '../../Functions/responsive';
 type Props = {
   navigation: {
     navigate: (screen: string) => void;
+    replace: (screen: string) => void;
   };
 };
 
 const LoginScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('alisher6269@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
@@ -44,7 +45,8 @@ const LoginScreen = ({ navigation }: Props) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      Toast.show('Login successful');
+      Toast.show('Login successfull');
+      navigation.replace('Main');
     }, 1000);
   };
 

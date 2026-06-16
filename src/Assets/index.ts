@@ -15,4 +15,7 @@ export const Images = {
   privateIcon: require('./images/Private.png'),
   backArrowIcon: require('./images/BackArrow.png'),
   confirmPasswordIcon: require('./images/Confirm.png'),
+  femaleProfile: require('./images/female1.png'),
+  femaleProfile2: require('./images/female2.png'),
+  maleProfile: require('./images/male2.png'),
 };
