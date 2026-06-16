@@ -13,6 +13,7 @@ import {
   SetNewPasswordScreen,
   PasswordResetSuccessScreen,
 } from '../Screens/Auth';
+import { BasicInfoScreen, SelectCountryScreen } from '../Screens/ProfileSetup';
 import MainTabNavigator from './MainTabNavigator';
 
 export type AuthStackParamList = {
@@ -26,6 +27,8 @@ export type AuthStackParamList = {
   CodeVerified: undefined;
   SetNewPassword: undefined;
   PasswordResetSuccess: undefined;
+  SelectCountry: undefined;
+  BasicInfo: undefined;
   Main: undefined;
 };
 
@@ -53,6 +56,8 @@ const AuthNavigator = () => {
           name="PasswordResetSuccess"
           component={PasswordResetSuccessScreen}
         />
+        <Stack.Screen name="SelectCountry" component={SelectCountryScreen} />
+        <Stack.Screen name="BasicInfo" component={BasicInfoScreen} />
         <Stack.Screen
           name="Main"
           component={MainTabNavigator}

@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }: Props) => {
     setTimeout(() => {
       setLoading(false);
       Toast.show('Login successfull');
-      navigation.replace('Main');
+      navigation.replace('SelectCountry');
     }, 1000);
   };
 

@@ -112,4 +112,20 @@ export const Strings = {
   tabMessages: 'Messages',
   tabLike: 'Like',
   tabProfile: 'Profile',
+
+  selectCountryTitle: 'Select Your Country',
+  selectCountrySubtitle:
+    'Choose your country to personalize your experience',
+  searchCountryPlaceholder: 'Search country...',
+  continueBtn: 'Continue',
+
+  tellUsAboutYouTitle: 'Tell Us About You',
+  tellUsAboutYouSubtitle: "Let's start with your basic details",
+  basicInfoStep: 'Step 1 of 6 — Basic Info',
+  genderLabel: 'Gender',
+  genderMale: 'Male',
+  genderFemale: 'Female',
+  dateOfBirthLabel: 'Date of Birth',
+  dateOfBirthPlaceholder: 'DD / MM / YYYY',
+  ageYears: 'years',
 };
