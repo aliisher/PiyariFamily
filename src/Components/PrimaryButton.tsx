@@ -19,6 +19,7 @@ type Props = {
   loading?: boolean;
   disabled?: boolean;
   showArrow?: boolean;
+  leftIcon?: string;
   style?: ViewStyle;
 };
 
@@ -28,6 +29,7 @@ const PrimaryButton = ({
   loading = false,
   disabled = false,
   showArrow = false,
+  leftIcon,
   style,
 }: Props) => {
   return (
@@ -40,6 +42,14 @@ const PrimaryButton = ({
         <ActivityIndicator color={Colors.white} />
       ) : (
         <View style={styles.content}>
+          {leftIcon ? (
+            <Icon
+              name={leftIcon}
+              size={fs(20)}
+              color={Colors.white}
+              style={styles.leftIcon}
+            />
+          ) : null}
           <Text style={styles.text}>{title}</Text>
           {showArrow && (
             <Icon
@@ -71,6 +81,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  leftIcon: {
+    marginRight: wp('2%'),
   },
   arrow: {
     marginLeft: wp('2%'),

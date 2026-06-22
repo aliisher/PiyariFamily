@@ -13,7 +13,16 @@ import {
   SetNewPasswordScreen,
   PasswordResetSuccessScreen,
 } from '../Screens/Auth';
-import { BasicInfoScreen, SelectCountryScreen } from '../Screens/ProfileSetup';
+import {
+  AddPhotosScreen,
+  BasicInfoScreen,
+  CareerScreen,
+  EducationScreen,
+  FaithCommunityScreen,
+  PhysicalDetailsScreen,
+  ProfileReadyScreen,
+  SelectCountryScreen,
+} from '../Screens/ProfileSetup';
 import MainTabNavigator from './MainTabNavigator';
 
 export type AuthStackParamList = {
@@ -29,6 +38,12 @@ export type AuthStackParamList = {
   PasswordResetSuccess: undefined;
   SelectCountry: undefined;
   BasicInfo: undefined;
+  Education: undefined;
+  Career: undefined;
+  PhysicalDetails: undefined;
+  FaithCommunity: undefined;
+  AddPhotos: undefined;
+  ProfileReady: undefined;
   Main: undefined;
 };
 
@@ -58,6 +73,18 @@ const AuthNavigator = () => {
         />
         <Stack.Screen name="SelectCountry" component={SelectCountryScreen} />
         <Stack.Screen name="BasicInfo" component={BasicInfoScreen} />
+        <Stack.Screen name="Education" component={EducationScreen} />
+        <Stack.Screen name="Career" component={CareerScreen} />
+        <Stack.Screen
+          name="PhysicalDetails"
+          component={PhysicalDetailsScreen}
+        />
+        <Stack.Screen
+          name="FaithCommunity"
+          component={FaithCommunityScreen}
+        />
+        <Stack.Screen name="AddPhotos" component={AddPhotosScreen} />
+        <Stack.Screen name="ProfileReady" component={ProfileReadyScreen} />
         <Stack.Screen
           name="Main"
           component={MainTabNavigator}

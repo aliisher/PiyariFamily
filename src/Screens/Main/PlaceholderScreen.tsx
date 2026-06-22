@@ -5,6 +5,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { resolveInsets } from '../../Functions/safeArea';
 import { hp } from '../../Functions/responsive';
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 };
 
 const PlaceholderScreen = ({ title }: Props) => {
-  const insets = useSafeAreaInsets();
+  const insets = resolveInsets(useSafeAreaInsets());
 
   return (
     <View

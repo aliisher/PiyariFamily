@@ -115,7 +115,6 @@ const ProfileDetailScreen = () => {
             </View>
           </View>
         </View>
-
         <View style={styles.quickInfoRow}>
           {profile.quickInfo.map(item => (
             <View key={item.subtitle} style={styles.quickInfoCard}>

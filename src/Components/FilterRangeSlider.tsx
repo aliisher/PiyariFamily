@@ -1,23 +1,34 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors } from '../Constant/Colors';
 import { Fonts } from '../Constant/Fonts';
 import { fs, hp, wp } from '../Functions/responsive';
 
 type Props = {
-  label: string;
+  title: string;
+  iconName?: string;
+  iconSource?: ImageSourcePropType;
   min: number;
   max: number;
   lowValue: number;
   highValue: number;
+  minLabel: string;
+  centerLabel: string;
+  maxLabel: string;
 };
 
 const FilterRangeSlider = ({
-  label,
+  title,
+  iconName,
+  iconSource,
   min,
   max,
   lowValue,
   highValue,
+  minLabel,
+  centerLabel,
+  maxLabel,
 }: Props) => {
   const range = max - min;
   const lowPercent = ((lowValue - min) / range) * 100;
@@ -25,7 +36,19 @@ const FilterRangeSlider = ({
 
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.sectionHeader}>
+        {iconSource ? (
+          <Image
+            source={iconSource}
+            style={styles.sectionIconImage}
+            resizeMode="contain"
+          />
+        ) : iconName ? (
+          <Icon name={iconName} size={fs(18)} color={Colors.primary} />
+        ) : null}
+        <Text style={styles.title}>{title}</Text>
+      </View>
+
       <View style={styles.track}>
         <View style={styles.trackBg} />
         <View
@@ -37,6 +60,12 @@ const FilterRangeSlider = ({
         <View style={[styles.thumb, { left: `${lowPercent}%` }]} />
         <View style={[styles.thumb, { left: `${highPercent}%` }]} />
       </View>
+
+      <View style={styles.labelsRow}>
+        <Text style={styles.edgeLabel}>{minLabel}</Text>
+        <Text style={styles.centerLabel}>{centerLabel}</Text>
+        <Text style={styles.edgeLabel}>{maxLabel}</Text>
+      </View>
     </View>
   );
 };
@@ -45,11 +74,20 @@ const styles = StyleSheet.create({
   wrapper: {
     marginBottom: hp('2.2%'),
   },
-  label: {
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('2%'),
+    marginBottom: hp('1.2%'),
+  },
+  sectionIconImage: {
+    width: fs(18),
+    height: fs(18),
+  },
+  title: {
     fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.primary,
-    marginBottom: hp('1.2%'),
   },
   track: {
     height: hp('2.8%'),
@@ -77,6 +115,22 @@ const styles = StyleSheet.create({
     marginTop: -wp('2.75%'),
     borderWidth: 2,
     borderColor: Colors.white,
+  },
+  labelsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: hp('0.8%'),
+  },
+  edgeLabel: {
+    fontSize: fs(11),
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+  },
+  centerLabel: {
+    fontSize: fs(12),
+    fontFamily: Fonts.semiBold,
+    color: Colors.primary,
   },
 });
 

@@ -8,7 +8,10 @@ import {
   View,
 } from 'react-native';
 import { CountryCode } from 'react-native-country-picker-modal';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackButton from '../../Components/BackButton';
 import PrimaryButton from '../../Components/PrimaryButton';
@@ -87,11 +90,16 @@ const SelectCountryScreen = ({ navigation }: Props) => {
 
             return (
               <TouchableOpacity
-                style={[styles.countryRow, isSelected && styles.countryRowSelected]}
+                style={[
+                  styles.countryRow,
+                  isSelected && styles.countryRowSelected,
+                ]}
                 activeOpacity={0.85}
                 onPress={() => setSelectedCode(item.code)}
               >
-                <Text style={styles.countryFlag}>{getFlagEmoji(item.code)}</Text>
+                <Text style={styles.countryFlag}>
+                  {getFlagEmoji(item.code)}
+                </Text>
                 <Text
                   style={[
                     styles.countryName,
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    marginTop: wp('2%'),
     paddingHorizontal: AuthStyles.horizontalPadding,
   },
   title: {

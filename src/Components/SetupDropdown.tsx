@@ -1,0 +1,174 @@
+import React from 'react';
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { AuthStyles, FontSizes } from '../Constant/AuthStyles';
+import { Colors } from '../Constant/Colors';
+import { Fonts } from '../Constant/Fonts';
+import { fs, hp, wp } from '../Functions/responsive';
+
+type Props = {
+  label?: string;
+  iconName?: string;
+  iconSource?: ImageSourcePropType;
+  placeholder: string;
+  value: string;
+  options: readonly string[];
+  isOpen: boolean;
+  onToggle: () => void;
+  onSelect: (value: string) => void;
+  style?: object;
+};
+
+const SetupDropdown = ({
+  label,
+  iconName,
+  iconSource,
+  placeholder,
+  value,
+  options,
+  isOpen,
+  onToggle,
+  onSelect,
+  style,
+}: Props) => {
+  return (
+    <View style={style}>
+      {label ? <Text style={styles.fieldLabel}>{label}</Text> : null}
+      <TouchableOpacity
+        style={styles.dropdownRow}
+        activeOpacity={0.85}
+        onPress={onToggle}
+      >
+        {iconSource ? (
+          <Image
+            source={iconSource}
+            style={[styles.dropdownIcon, styles.iconImage]}
+            resizeMode="contain"
+          />
+        ) : (
+          <Icon
+            name={iconName!}
+            size={fs(20)}
+            color={Colors.primary}
+            style={styles.dropdownIcon}
+          />
+        )}
+        <Text
+          style={[styles.dropdownText, !value && styles.dropdownPlaceholder]}
+        >
+          {value || placeholder}
+        </Text>
+        <Icon
+          name={isOpen ? 'chevron-up' : 'chevron-down'}
+          size={fs(22)}
+          color={Colors.iconMuted}
+        />
+      </TouchableOpacity>
+      {isOpen ? (
+        <View style={styles.dropdownMenu}>
+          {options.map(option => {
+            const isSelected = value === option;
+
+            return (
+              <TouchableOpacity
+                key={option}
+                style={[
+                  styles.dropdownOption,
+                  isSelected && styles.dropdownOptionSelected,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => onSelect(option)}
+              >
+                <Text
+                  style={[
+                    styles.dropdownOptionText,
+                    isSelected && styles.dropdownOptionTextSelected,
+                  ]}
+                >
+                  {option}
+                </Text>
+                {isSelected ? (
+                  <Icon name="check" size={fs(18)} color={Colors.gold} />
+                ) : null}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      ) : null}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  fieldLabel: {
+    fontSize: FontSizes.body,
+    color: Colors.label,
+    marginBottom: hp('1%'),
+    fontFamily: Fonts.medium,
+  },
+  dropdownRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.inputBg,
+    paddingHorizontal: wp('3.7%'),
+    height: AuthStyles.inputHeight,
+    marginBottom: hp('0.5%'),
+  },
+  dropdownIcon: {
+    marginRight: wp('2.5%'),
+  },
+  iconImage: {
+    width: fs(15),
+    height: fs(15),
+  },
+  dropdownText: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  dropdownPlaceholder: {
+    color: Colors.placeholder,
+  },
+  dropdownMenu: {
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.white,
+    overflow: 'hidden',
+    marginBottom: hp('1%'),
+  },
+  dropdownOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp('4%'),
+    paddingVertical: hp('1.4%'),
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.divider,
+  },
+  dropdownOptionSelected: {
+    backgroundColor: Colors.inputBg,
+  },
+  dropdownOptionText: {
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  dropdownOptionTextSelected: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.primary,
+  },
+});
+
+export default SetupDropdown;

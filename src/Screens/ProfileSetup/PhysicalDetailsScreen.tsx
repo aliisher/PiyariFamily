@@ -1,0 +1,339 @@
+import React, { useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Images } from '../../Assets';
+import BackButton from '../../Components/BackButton';
+import FilterChip from '../../Components/FilterChip';
+import PrimaryButton from '../../Components/PrimaryButton';
+import SetupDropdown from '../../Components/SetupDropdown';
+import SetupProgressBar from '../../Components/SetupProgressBar';
+import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
+import { Colors } from '../../Constant/Colors';
+import {
+  BODY_TYPE_OPTIONS,
+  BodyType,
+  COMPLEXION_OPTIONS,
+  Complexion,
+  HEIGHT_FEET_OPTIONS,
+  HEIGHT_INCHES_OPTIONS,
+  PROFILE_SETUP_TOTAL_STEPS,
+} from '../../Constant/ProfileSetup';
+import { Fonts } from '../../Constant/Fonts';
+import { Strings } from '../../Constant/Strings';
+import { fs, hp, wp } from '../../Functions/responsive';
+
+type Props = {
+  navigation: {
+    goBack: () => void;
+    navigate: (screen: string) => void;
+  };
+};
+
+const PhysicalDetailsScreen = ({ navigation }: Props) => {
+  const insets = useSafeAreaInsets();
+  const [feet, setFeet] = useState('');
+  const [inches, setInches] = useState('');
+  const [weight, setWeight] = useState('');
+  const [bodyType, setBodyType] = useState<BodyType>('Athletic');
+  const [complexion, setComplexion] = useState<Complexion>('Fair');
+  const [hasDisability, setHasDisability] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<'feet' | 'inches' | null>(
+    null,
+  );
+
+  const handleContinue = () => {
+    navigation.navigate('FaithCommunity');
+  };
+
+  return (
+    <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <BackButton variant="pink" onPress={() => navigation.goBack()} />
+
+          <SetupProgressBar
+            currentStep={4}
+            totalSteps={PROFILE_SETUP_TOTAL_STEPS}
+            label={Strings.physicalDetailsStep}
+          />
+
+          <Text style={styles.title}>{Strings.physicalDetailsTitle}</Text>
+          <Text style={styles.subtitle}>{Strings.physicalDetailsSubtitle}</Text>
+
+          <Text style={styles.fieldLabel}>{Strings.heightLabel}</Text>
+          <View style={styles.heightRow}>
+            <SetupDropdown
+              iconSource={Images.feetIcon}
+              placeholder={Strings.selectFeetPlaceholder}
+              value={feet ? `${feet} ft` : ''}
+              options={HEIGHT_FEET_OPTIONS.map(option => `${option} ft`)}
+              isOpen={openDropdown === 'feet'}
+              onToggle={() =>
+                setOpenDropdown(prev => (prev === 'feet' ? null : 'feet'))
+              }
+              onSelect={value => {
+                setFeet(value.replace(' ft', ''));
+                setOpenDropdown(null);
+              }}
+              style={styles.heightDropdown}
+            />
+            <SetupDropdown
+              iconSource={Images.inchesIcon}
+              placeholder={Strings.selectInchesPlaceholder}
+              value={inches ? `${inches} in` : ''}
+              options={HEIGHT_INCHES_OPTIONS.map(option => `${option} in`)}
+              isOpen={openDropdown === 'inches'}
+              onToggle={() =>
+                setOpenDropdown(prev => (prev === 'inches' ? null : 'inches'))
+              }
+              onSelect={value => {
+                setInches(value.replace(' in', ''));
+                setOpenDropdown(null);
+              }}
+              style={styles.heightDropdown}
+            />
+          </View>
+
+          <Text style={styles.fieldLabel}>{Strings.weightLabel}</Text>
+          <View style={styles.weightRow}>
+            <Icon
+              name="scale-bathroom"
+              size={fs(20)}
+              color={Colors.primary}
+              style={styles.weightIcon}
+            />
+            <TextInput
+              style={styles.weightInput}
+              placeholder={Strings.weightPlaceholder}
+              placeholderTextColor={Colors.placeholder}
+              value={weight}
+              onChangeText={setWeight}
+              keyboardType="numeric"
+            />
+            <View style={styles.optionalBadge}>
+              <Text style={styles.optionalBadgeText}>{Strings.optional}</Text>
+            </View>
+          </View>
+
+          <Text style={styles.fieldLabel}>{Strings.bodyTypeLabel}</Text>
+          <View style={styles.chipRow}>
+            {BODY_TYPE_OPTIONS.map(option => (
+              <FilterChip
+                key={option}
+                label={option}
+                selected={bodyType === option}
+                onPress={() => setBodyType(option)}
+              />
+            ))}
+          </View>
+
+          <Text style={styles.fieldLabel}>{Strings.complexionLabel}</Text>
+          <View style={styles.chipRow}>
+            {COMPLEXION_OPTIONS.map(option => (
+              <FilterChip
+                key={option}
+                label={option}
+                selected={complexion === option}
+                onPress={() => setComplexion(option)}
+              />
+            ))}
+          </View>
+
+          <View style={styles.disabilityRow}>
+            <Icon
+              name="wheelchair-accessibility"
+              size={fs(20)}
+              color={Colors.primary}
+              style={styles.disabilityIcon}
+            />
+            <Text style={styles.disabilityText}>
+              {Strings.physicalDisabilityLabel}
+            </Text>
+            <Switch
+              value={hasDisability}
+              onValueChange={setHasDisability}
+              trackColor={{
+                false: Colors.divider,
+                true: Colors.focusBorder,
+              }}
+              thumbColor={hasDisability ? Colors.primary : Colors.white}
+            />
+          </View>
+
+          <View style={styles.noticeBox}>
+            <Icon
+              name="heart-outline"
+              size={fs(18)}
+              color={Colors.primary}
+              style={styles.noticeIcon}
+            />
+            <Text style={styles.noticeText}>{Strings.physicalDetailsNotice}</Text>
+          </View>
+        </ScrollView>
+
+        <View
+          style={[
+            styles.footer,
+            { paddingBottom: Math.max(insets.bottom, hp('2%')) },
+          ]}
+        >
+          <PrimaryButton
+            title={Strings.continueBtn}
+            onPress={handleContinue}
+            showArrow
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  flex: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: AuthStyles.horizontalPadding,
+    paddingBottom: hp('2%'),
+  },
+  title: {
+    fontSize: FontSizes.h2,
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+    marginBottom: hp('0.6%'),
+    letterSpacing: -0.3,
+  },
+  subtitle: {
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+    marginBottom: hp('2.5%'),
+    lineHeight: hp('2.4%'),
+  },
+  fieldLabel: {
+    fontSize: FontSizes.body,
+    color: Colors.label,
+    marginBottom: hp('1%'),
+    fontFamily: Fonts.medium,
+  },
+  heightRow: {
+    flexDirection: 'row',
+    gap: wp('3%'),
+    marginBottom: hp('2%'),
+  },
+  heightDropdown: {
+    flex: 1,
+  },
+  weightRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.inputBg,
+    paddingHorizontal: wp('3.7%'),
+    height: AuthStyles.inputHeight,
+    marginBottom: hp('2.2%'),
+  },
+  weightIcon: {
+    marginRight: wp('2.5%'),
+  },
+  weightInput: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+    paddingVertical: 0,
+  },
+  optionalBadge: {
+    backgroundColor: '#FFF3E0',
+    paddingHorizontal: wp('2.2%'),
+    paddingVertical: hp('0.45%'),
+    borderRadius: wp('3%'),
+    marginLeft: wp('1.5%'),
+  },
+  optionalBadgeText: {
+    fontSize: fs(11),
+    fontFamily: Fonts.semiBold,
+    color: Colors.gold,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: wp('2.5%'),
+    marginBottom: hp('2.2%'),
+  },
+  disabilityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.inputBg,
+    paddingHorizontal: wp('3.7%'),
+    height: AuthStyles.inputHeight,
+    marginBottom: hp('2.2%'),
+  },
+  disabilityIcon: {
+    marginRight: wp('2.5%'),
+  },
+  disabilityText: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  noticeBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: Colors.tabActiveBg,
+    borderRadius: AuthStyles.inputRadius,
+    paddingHorizontal: wp('4%'),
+    paddingVertical: hp('1.5%'),
+  },
+  noticeIcon: {
+    marginRight: wp('2.5%'),
+    marginTop: hp('0.2%'),
+  },
+  noticeText: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    fontStyle: 'italic',
+    color: Colors.primary,
+    lineHeight: hp('2.2%'),
+  },
+  footer: {
+    paddingHorizontal: AuthStyles.horizontalPadding,
+    paddingTop: hp('1.5%'),
+    borderTopWidth: 1,
+    borderTopColor: Colors.divider,
+    backgroundColor: Colors.background,
+  },
+});
+
+export default PhysicalDetailsScreen;

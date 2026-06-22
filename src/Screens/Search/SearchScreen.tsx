@@ -1,0 +1,484 @@
+import React, { useState } from 'react';
+import {
+  Image,
+  ImageSourcePropType,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Images } from '../../Assets';
+import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
+import { Colors } from '../../Constant/Colors';
+import { Fonts } from '../../Constant/Fonts';
+import { Strings } from '../../Constant/Strings';
+import { SearchStackParamList } from '../../Navigation/SearchStackNavigator';
+import { fs, hp, wp } from '../../Functions/responsive';
+
+type NavigationProp = NativeStackNavigationProp<
+  SearchStackParamList,
+  'SearchMain'
+>;
+
+type QuickFilter = 'nearMe' | 'verified' | 'newProfiles';
+
+type SuggestedMatch = {
+  id: string;
+  name: string;
+  age: number;
+  location: string;
+  profession: string;
+  image: ImageSourcePropType;
+  tier: 'VIP' | 'VVIP';
+  isVerified: boolean;
+};
+
+const QUICK_FILTERS: {
+  id: QuickFilter;
+  label: string;
+  icon: string;
+}[] = [
+  { id: 'nearMe', label: Strings.nearMe, icon: 'map-marker-outline' },
+  { id: 'verified', label: Strings.verifiedProfiles, icon: 'shield-check-outline' },
+  { id: 'newProfiles', label: Strings.newProfiles, icon: 'creation' },
+];
+
+const RECENT_SEARCHES = [
+  'Software Engineer, Multan',
+  'MBA, Lahore',
+  'Doctor, Karachi',
+];
+
+const SUGGESTED_MATCHES: SuggestedMatch[] = [
+  {
+    id: '1',
+    name: 'Aisha',
+    age: 26,
+    location: 'Lahore',
+    profession: 'Designer',
+    image: Images.femaleProfile,
+    tier: 'VIP',
+    isVerified: true,
+  },
+  {
+    id: '2',
+    name: 'Rohan',
+    age: 29,
+    location: 'Karachi',
+    profession: 'Engineer',
+    image: Images.maleProfile,
+    tier: 'VVIP',
+    isVerified: true,
+  },
+];
+
+const SearchScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeQuickFilter, setActiveQuickFilter] =
+    useState<QuickFilter>('nearMe');
+  const [recentSearches, setRecentSearches] = useState(RECENT_SEARCHES);
+
+  const removeRecentSearch = (item: string) => {
+    setRecentSearches(prev => prev.filter(search => search !== item));
+  };
+
+  return (
+    <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{Strings.findYourMatch}</Text>
+          <TouchableOpacity
+            style={styles.filterBtn}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('FilterMatches')}
+          >
+            <Icon name="filter-variant" size={fs(20)} color={Colors.primary} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.searchRow}>
+          <Icon name="magnify" size={fs(20)} color={Colors.textLight} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder={Strings.searchPlaceholder}
+            placeholderTextColor={Colors.placeholder}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
+
+        <Text style={styles.sectionLabel}>{Strings.quickFilters}</Text>
+        <View style={styles.quickFilterRow}>
+          {QUICK_FILTERS.map(filter => {
+            const selected = activeQuickFilter === filter.id;
+
+            return (
+              <TouchableOpacity
+                key={filter.id}
+                style={[
+                  styles.quickFilterChip,
+                  selected && styles.quickFilterChipSelected,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => setActiveQuickFilter(filter.id)}
+              >
+                <Icon
+                  name={filter.icon}
+                  size={fs(14)}
+                  color={selected ? Colors.white : Colors.primary}
+                />
+                <Text
+                  style={[
+                    styles.quickFilterText,
+                    selected && styles.quickFilterTextSelected,
+                  ]}
+                >
+                  {filter.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <Text style={styles.recentLabel}>{Strings.recentSearches}</Text>
+        {recentSearches.map(item => (
+          <View key={item} style={styles.recentRow}>
+            <Icon
+              name="clock-outline"
+              size={fs(18)}
+              color={Colors.textLight}
+              style={styles.recentIcon}
+            />
+            <Text style={styles.recentText}>{item}</Text>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => removeRecentSearch(item)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Icon name="close" size={fs(16)} color={Colors.textLight} />
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{Strings.suggestedMatches}</Text>
+          <TouchableOpacity activeOpacity={0.8}>
+            <Text style={styles.seeAll}>{Strings.seeAll} →</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.matchGrid}>
+          {SUGGESTED_MATCHES.map(match => (
+            <TouchableOpacity
+              key={match.id}
+              style={styles.matchCard}
+              activeOpacity={0.9}
+              onPress={() =>
+                navigation.navigate('ProfileDetail', { profileId: match.id })
+              }
+            >
+              <View style={styles.matchImageWrap}>
+                <Image
+                  source={match.image}
+                  style={styles.matchImage}
+                  resizeMode="cover"
+                />
+                {match.isVerified ? (
+                  <View style={styles.verifyBadge}>
+                    <Icon
+                      name="shield-check"
+                      size={fs(11)}
+                      color={Colors.white}
+                    />
+                  </View>
+                ) : null}
+                <View style={styles.tierBadge}>
+                  <Icon
+                    name={match.tier === 'VIP' ? 'star' : 'crown'}
+                    size={fs(10)}
+                    color={Colors.white}
+                  />
+                  <Text style={styles.tierText}>{match.tier}</Text>
+                </View>
+              </View>
+
+              <View style={styles.matchBody}>
+                <Text style={styles.matchName}>
+                  {match.name}, {match.age}
+                </Text>
+                <View style={styles.matchLocationRow}>
+                  <Icon
+                    name="map-marker-outline"
+                    size={fs(11)}
+                    color={Colors.textLight}
+                  />
+                  <Text style={styles.matchLocation}>{match.location}</Text>
+                </View>
+                <View style={styles.matchBottomRow}>
+                  <View style={styles.professionTag}>
+                    <Text style={styles.professionText}>
+                      {match.profession}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.likeBtn}
+                    activeOpacity={0.85}
+                  >
+                    <Icon
+                      name="heart-outline"
+                      size={fs(16)}
+                      color={Colors.primary}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  scrollContent: {
+    paddingHorizontal: AuthStyles.horizontalPadding,
+    paddingTop: hp('0.5%'),
+    paddingBottom: hp('2%'),
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: hp('2%'),
+  },
+  title: {
+    fontSize: FontSizes.h2,
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+    letterSpacing: -0.3,
+    flex: 1,
+  },
+  filterBtn: {
+    width: wp('11%'),
+    height: wp('11%'),
+    borderRadius: wp('3%'),
+    backgroundColor: Colors.tabActiveBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.tabActiveBg,
+    borderRadius: AuthStyles.inputRadius,
+    paddingHorizontal: wp('3.8%'),
+    height: AuthStyles.inputHeight,
+    gap: wp('2.5%'),
+    marginBottom: hp('2.2%'),
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+    paddingVertical: 0,
+  },
+  sectionLabel: {
+    fontSize: fs(14),
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+    marginBottom: hp('1.2%'),
+  },
+  quickFilterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: wp('2%'),
+    marginBottom: hp('2.2%'),
+  },
+  quickFilterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('1.5%'),
+    paddingHorizontal: wp('3.5%'),
+    paddingVertical: hp('0.9%'),
+    borderRadius: wp('4%'),
+    backgroundColor: Colors.tabActiveBg,
+    borderWidth: 1,
+    borderColor: Colors.focusBorder,
+  },
+  quickFilterChipSelected: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  quickFilterText: {
+    fontSize: fs(12),
+    fontFamily: Fonts.medium,
+    color: Colors.primary,
+  },
+  quickFilterTextSelected: {
+    color: Colors.white,
+  },
+  recentLabel: {
+    fontSize: fs(13),
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+    marginBottom: hp('1%'),
+  },
+  recentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: hp('1%'),
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.divider,
+  },
+  recentIcon: {
+    marginRight: wp('2.5%'),
+  },
+  recentText: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: hp('2%'),
+    marginBottom: hp('1.5%'),
+  },
+  sectionTitle: {
+    fontSize: fs(16),
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+  },
+  seeAll: {
+    fontSize: fs(13),
+    fontFamily: Fonts.semiBold,
+    color: Colors.gold,
+  },
+  matchGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: hp('1.5%'),
+  },
+  matchCard: {
+    width: '48%',
+    backgroundColor: Colors.white,
+    borderRadius: wp('4.5%'),
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  matchImageWrap: {
+    width: '100%',
+    height: hp('15.5%'),
+    position: 'relative',
+    backgroundColor: Colors.gradientStart,
+  },
+  matchImage: {
+    width: '100%',
+    height: '100%',
+  },
+  verifyBadge: {
+    position: 'absolute',
+    top: hp('0.8%'),
+    left: wp('2%'),
+    width: wp('6%'),
+    height: wp('6%'),
+    borderRadius: wp('3%'),
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tierBadge: {
+    position: 'absolute',
+    top: hp('0.8%'),
+    right: wp('2%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('0.8%'),
+    backgroundColor: Colors.gold,
+    paddingHorizontal: wp('2%'),
+    paddingVertical: hp('0.3%'),
+    borderRadius: wp('2.5%'),
+  },
+  tierText: {
+    fontSize: fs(9),
+    fontFamily: Fonts.semiBold,
+    color: Colors.white,
+  },
+  matchBody: {
+    paddingHorizontal: wp('3%'),
+    paddingTop: hp('1%'),
+    paddingBottom: hp('1.1%'),
+  },
+  matchName: {
+    fontSize: fs(14),
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+    marginBottom: hp('0.2%'),
+  },
+  matchLocationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('0.5%'),
+    marginBottom: hp('0.9%'),
+  },
+  matchLocation: {
+    fontSize: fs(11),
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+  },
+  matchBottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  professionTag: {
+    backgroundColor: Colors.suggestedTagBg,
+    paddingHorizontal: wp('2.8%'),
+    paddingVertical: hp('0.4%'),
+    borderRadius: wp('3%'),
+    maxWidth: '68%',
+  },
+  professionText: {
+    fontSize: fs(10),
+    fontFamily: Fonts.medium,
+    color: Colors.primary,
+  },
+  likeBtn: {
+    width: wp('8.5%'),
+    height: wp('8.5%'),
+    borderRadius: wp('4.25%'),
+    borderWidth: 1,
+    borderColor: Colors.focusBorder,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default SearchScreen;

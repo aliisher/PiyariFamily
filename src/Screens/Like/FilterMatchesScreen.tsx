@@ -21,11 +21,11 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
-import { LikeStackParamList } from '../../Navigation/LikeStackNavigator';
+import { getFooterBottomPadding } from '../../Functions/safeArea';
 import { fs, hp, wp } from '../../Functions/responsive';
 
-type NavigationProp = NativeStackNavigationProp<
-  LikeStackParamList,
+type FilterNavigationProp = NativeStackNavigationProp<
+  { FilterMatches: undefined },
   'FilterMatches'
 >;
 
@@ -37,7 +37,7 @@ const MARITAL_OPTIONS = ['Never Married', 'Divorced', 'Widowed'];
 
 const FilterMatchesScreen = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<FilterNavigationProp>();
 
   const [location, setLocation] = useState('Lahore');
   const [education, setEducation] = useState("Bachelor's");
@@ -67,11 +67,14 @@ const FilterMatchesScreen = () => {
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
-        <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
-        <Text style={styles.headerTitle}>{Strings.filterMatches}</Text>
-        <TouchableOpacity activeOpacity={0.85} onPress={handleReset}>
-          <Text style={styles.resetText}>{Strings.reset}</Text>
-        </TouchableOpacity>
+        <View style={styles.headerRow}>
+          <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
+          <Text style={styles.headerTitle}>{Strings.filterMatches}</Text>
+          <TouchableOpacity activeOpacity={0.85} onPress={handleReset}>
+            <Text style={styles.resetText}>{Strings.reset}</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerSubtitle}>{Strings.filterMatchesSubtitle}</Text>
       </View>
 
       <ScrollView
@@ -80,11 +83,15 @@ const FilterMatchesScreen = () => {
         keyboardShouldPersistTaps="handled"
       >
         <FilterRangeSlider
-          label={`${Strings.ageRange}: 24 – 32 ${Strings.ageYears}`}
+          title={Strings.ageRange}
+          iconName="calendar-outline"
           min={18}
-          max={50}
+          max={60}
           lowValue={24}
           highValue={32}
+          minLabel="18 yrs"
+          centerLabel={`24 – 32 ${Strings.ageYears}`}
+          maxLabel="60 yrs"
         />
 
         <View style={styles.section}>
@@ -93,7 +100,7 @@ const FilterMatchesScreen = () => {
             <Text style={styles.sectionTitle}>{Strings.locationLabel}</Text>
           </View>
           <View style={styles.searchRow}>
-            <Icon name="magnify" size={fs(18)} color={Colors.textLight} />
+            <Icon name="map-marker-outline" size={fs(18)} color={Colors.textLight} />
             <TextInput
               style={styles.searchInput}
               placeholder={Strings.cityOrState}
@@ -187,24 +194,29 @@ const FilterMatchesScreen = () => {
         </View>
 
         <FilterRangeSlider
-          label={`${Strings.incomeRange}: PKR 5000 – PKR 20000`}
+          title={Strings.incomeRange}
+          iconName="wallet-outline"
           min={0}
-          max={100000}
+          max={200000}
           lowValue={5000}
           highValue={20000}
+          minLabel="PKR 0"
+          centerLabel="PKR 5000 – PKR 20000"
+          maxLabel="PKR 200000"
         />
       </ScrollView>
 
       <View
         style={[
           styles.footer,
-          { paddingBottom: Math.max(insets.bottom, hp('1.5%')) },
+          { paddingBottom: getFooterBottomPadding(insets.bottom) },
         ]}
       >
         <PrimaryButton
           title={Strings.applyFilters}
           onPress={() => navigation.goBack()}
           showArrow
+          leftIcon="filter-variant"
         />
         <TouchableOpacity activeOpacity={0.85} onPress={handleClearAll}>
           <Text style={styles.clearAll}>{Strings.clearAll}</Text>
@@ -220,11 +232,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   header: {
+    paddingHorizontal: AuthStyles.horizontalPadding,
+    marginBottom: hp('1.5%'),
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1%'),
+    marginBottom: hp('0.5%'),
   },
   headerTitle: {
     fontSize: FontSizes.h3,
@@ -232,10 +247,18 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     letterSpacing: -0.2,
   },
+  headerSubtitle: {
+    fontSize: fs(13),
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+    textAlign: 'center',
+    lineHeight: hp('2.1%'),
+    paddingHorizontal: wp('8%'),
+  },
   resetText: {
     fontSize: fs(13),
     fontFamily: Fonts.semiBold,
-    color: Colors.primary,
+    color: Colors.gold,
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
@@ -265,6 +288,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
     borderColor: Colors.focusBorder,
     borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.inputBg,
     paddingHorizontal: wp('3.5%'),
     height: AuthStyles.inputHeight,
     marginBottom: hp('1.2%'),
@@ -293,7 +317,7 @@ const styles = StyleSheet.create({
   clearAll: {
     fontSize: fs(13),
     fontFamily: Fonts.semiBold,
-    color: Colors.primary,
+    color: Colors.gold,
     marginTop: hp('1.2%'),
   },
 });

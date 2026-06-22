@@ -21,3 +21,144 @@ export const PROFILE_COUNTRIES: CountryOption[] = [
 ];
 
 export const PROFILE_SETUP_TOTAL_STEPS = 6;
+
+export const MARITAL_STATUS_OPTIONS = [
+  'Single',
+  'Divorced',
+  'Widowed',
+] as const;
+
+export type MaritalStatus = (typeof MARITAL_STATUS_OPTIONS)[number];
+
+export const QUALIFICATION_OPTIONS = [
+  "Bachelor's Degree",
+  "Master's Degree",
+  'PhD',
+  'Diploma',
+  'High School',
+] as const;
+
+export type Qualification = (typeof QUALIFICATION_OPTIONS)[number];
+
+export const INCOME_RANGE_OPTIONS = [
+  'Dependent on Family',
+  'Less than 50K',
+  '50K to 100K',
+  '100K to 150K',
+  '150K to 200K',
+] as const;
+
+export type IncomeRange = (typeof INCOME_RANGE_OPTIONS)[number];
+
+export const RESIDENCE_STATUS_OPTIONS = [
+  'Owned',
+  'Rented',
+  'Family Owned',
+] as const;
+
+export type ResidenceStatus = (typeof RESIDENCE_STATUS_OPTIONS)[number];
+
+export const EDIT_MARITAL_STATUS_OPTIONS = [
+  'Never Married',
+  'Divorced',
+  'Widowed',
+] as const;
+
+export type EditMaritalStatus = (typeof EDIT_MARITAL_STATUS_OPTIONS)[number];
+
+export const COMMUNITY_OPTIONS = [
+  'Sunni',
+  'Shia',
+  'Brahmin',
+  'Rajput',
+  'Punjabi',
+  'Other',
+] as const;
+
+export type Community = (typeof COMMUNITY_OPTIONS)[number];
+
+export const HEIGHT_FEET_OPTIONS = ['4', '5', '6', '7'] as const;
+export const HEIGHT_INCHES_OPTIONS = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+] as const;
+
+export const BODY_TYPE_OPTIONS = [
+  'Slim',
+  'Athletic',
+  'Average',
+  'Heavy',
+] as const;
+
+export type BodyType = (typeof BODY_TYPE_OPTIONS)[number];
+
+export const COMPLEXION_OPTIONS = [
+  'Fair',
+  'Wheatish',
+  'Dusky',
+  'Dark',
+] as const;
+
+export type Complexion = (typeof COMPLEXION_OPTIONS)[number];
+
+export const EMPLOYMENT_TYPE_OPTIONS = [
+  'Employed',
+  'Self-Employed',
+  'Business',
+] as const;
+
+export type EmploymentType = (typeof EMPLOYMENT_TYPE_OPTIONS)[number];
+
+export const RELIGION_OPTIONS = [
+  'Islam',
+  'Hinduism',
+  'Christianity',
+  'Sikhism',
+  'Buddhism',
+  'Jainism',
+  'Other',
+] as const;
+
+export type Religion = (typeof RELIGION_OPTIONS)[number];
+
+export const MOTHER_TONGUE_OPTIONS = [
+  'Urdu',
+  'English',
+  'Hindi',
+  'Punjabi',
+  'Sindhi',
+  'Pashto',
+  'Bengali',
+  'Other',
+] as const;
+
+export type MotherTongue = (typeof MOTHER_TONGUE_OPTIONS)[number];
+
+export const OTHER_LANGUAGE_OPTIONS = [
+  'Urdu',
+  'English',
+  'Hindi',
+  'Punjabi',
+  'Sindhi',
+  'Pashto',
+  'Bengali',
+  'Arabic',
+  'Persian',
+  'Turkish',
+] as const;
+
+export type OtherLanguage = (typeof OTHER_LANGUAGE_OPTIONS)[number];
+
+export const MAX_OTHER_LANGUAGES = 5;
+
+export const PROFILE_PHOTO_SLOTS = 6;

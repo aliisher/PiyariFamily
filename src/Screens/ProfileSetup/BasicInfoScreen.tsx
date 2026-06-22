@@ -23,7 +23,11 @@ import PrimaryButton from '../../Components/PrimaryButton';
 import SetupProgressBar from '../../Components/SetupProgressBar';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
-import { PROFILE_SETUP_TOTAL_STEPS } from '../../Constant/ProfileSetup';
+import {
+  MARITAL_STATUS_OPTIONS,
+  MaritalStatus,
+  PROFILE_SETUP_TOTAL_STEPS,
+} from '../../Constant/ProfileSetup';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
 import { fs, hp, wp } from '../../Functions/responsive';
@@ -90,6 +94,8 @@ const BasicInfoScreen = ({ navigation }: Props) => {
   const [fullName, setFullName] = useState('');
   const [gender, setGender] = useState<Gender>('male');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const [maritalStatus, setMaritalStatus] = useState<MaritalStatus | ''>('');
+  const [maritalDropdownOpen, setMaritalDropdownOpen] = useState(false);
 
   const age = useMemo(() => {
     const parsed = parseDateOfBirth(dateOfBirth);
@@ -108,7 +114,11 @@ const BasicInfoScreen = ({ navigation }: Props) => {
       Toast.show('Please enter a valid date of birth');
       return;
     }
-    navigation.replace('Main');
+    if (!maritalStatus) {
+      Toast.show('Please select your marital status');
+      return;
+    }
+    navigation.navigate('Education');
   };
 
   return (
@@ -214,6 +224,67 @@ const BasicInfoScreen = ({ navigation }: Props) => {
               </View>
             ) : null}
           </View>
+
+          <Text style={styles.fieldLabel}>{Strings.maritalStatusDetail}</Text>
+          <TouchableOpacity
+            style={styles.dropdownRow}
+            activeOpacity={0.85}
+            onPress={() => setMaritalDropdownOpen(prev => !prev)}
+          >
+            <Icon
+              name="heart-outline"
+              size={fs(20)}
+              color={Colors.primary}
+              style={styles.dropdownIcon}
+            />
+            <Text
+              style={[
+                styles.dropdownText,
+                !maritalStatus && styles.dropdownPlaceholder,
+              ]}
+            >
+              {maritalStatus || Strings.maritalStatusPlaceholder}
+            </Text>
+            <Icon
+              name={maritalDropdownOpen ? 'chevron-up' : 'chevron-down'}
+              size={fs(22)}
+              color={Colors.iconMuted}
+            />
+          </TouchableOpacity>
+          {maritalDropdownOpen ? (
+            <View style={styles.dropdownMenu}>
+              {MARITAL_STATUS_OPTIONS.map(option => {
+                const isSelected = maritalStatus === option;
+
+                return (
+                  <TouchableOpacity
+                    key={option}
+                    style={[
+                      styles.dropdownOption,
+                      isSelected && styles.dropdownOptionSelected,
+                    ]}
+                    activeOpacity={0.85}
+                    onPress={() => {
+                      setMaritalStatus(option);
+                      setMaritalDropdownOpen(false);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownOptionText,
+                        isSelected && styles.dropdownOptionTextSelected,
+                      ]}
+                    >
+                      {option}
+                    </Text>
+                    {isSelected ? (
+                      <Icon name="check" size={fs(18)} color={Colors.gold} />
+                    ) : null}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : null}
         </ScrollView>
 
         <View
@@ -341,6 +412,58 @@ const styles = StyleSheet.create({
     fontSize: fs(11),
     fontFamily: Fonts.semiBold,
     color: Colors.gold,
+  },
+  dropdownRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.inputBg,
+    paddingHorizontal: wp('3.7%'),
+    height: AuthStyles.inputHeight,
+    marginBottom: hp('0.5%'),
+  },
+  dropdownIcon: {
+    marginRight: wp('2.5%'),
+  },
+  dropdownText: {
+    flex: 1,
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  dropdownPlaceholder: {
+    color: Colors.placeholder,
+  },
+  dropdownMenu: {
+    borderWidth: 1.2,
+    borderColor: Colors.border,
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.white,
+    overflow: 'hidden',
+    marginBottom: hp('1%'),
+  },
+  dropdownOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp('4%'),
+    paddingVertical: hp('1.4%'),
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.divider,
+  },
+  dropdownOptionSelected: {
+    backgroundColor: Colors.inputBg,
+  },
+  dropdownOptionText: {
+    fontSize: FontSizes.body,
+    fontFamily: Fonts.regular,
+    color: Colors.text,
+  },
+  dropdownOptionTextSelected: {
+    fontFamily: Fonts.semiBold,
+    color: Colors.primary,
   },
   footer: {
     paddingHorizontal: AuthStyles.horizontalPadding,

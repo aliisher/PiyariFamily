@@ -1,15 +1,18 @@
 import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors } from '../Constant/Colors';
 import { Fonts } from '../Constant/Fonts';
 import { Strings } from '../Constant/Strings';
+import { getTabBarBottomPadding, resolveInsets } from '../Functions/safeArea';
 import { fs, hp, wp } from '../Functions/responsive';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeStackNavigator from './HomeStackNavigator';
 import LikeStackNavigator from './LikeStackNavigator';
-import PlaceholderScreen from '../Screens/Main/PlaceholderScreen';
+import SearchStackNavigator from './SearchStackNavigator';
+import MessagesStackNavigator from './MessagesStackNavigator';
+import ProfileStackNavigator from './ProfileStackNavigator';
 
 export type MainTabParamList = {
   Home: undefined;
@@ -29,7 +32,14 @@ type TabIconProps = {
 };
 
 const TabIcon = ({ name, focused, color }: TabIconProps) => {
-  if (focused && (name === 'home' || name === 'heart-outline')) {
+  if (
+    focused &&
+    (name === 'home' ||
+      name === 'heart-outline' ||
+      name === 'magnify' ||
+      name === 'message-outline' ||
+      name === 'account-outline')
+  ) {
     return (
       <View style={styles.activeIconWrap}>
         <Icon name={name} size={fs(22)} color={Colors.primary} />
@@ -41,11 +51,8 @@ const TabIcon = ({ name, focused, color }: TabIconProps) => {
 };
 
 const MainTabNavigator = () => {
-  const insets = useSafeAreaInsets();
-  const bottomPadding = Math.max(
-    insets.bottom,
-    Platform.OS === 'android' ? hp('5%') : hp('0.5%'),
-  );
+  const insets = resolveInsets(useSafeAreaInsets());
+  const bottomPadding = getTabBarBottomPadding(insets.bottom);
 
   return (
     <Tab.Navigator
@@ -86,19 +93,19 @@ const MainTabNavigator = () => {
         options={{ tabBarLabel: Strings.tabHome }}
       />
       <Tab.Screen name="Search" options={{ tabBarLabel: Strings.tabSearch }}>
-        {() => <PlaceholderScreen title={Strings.tabSearch} />}
+        {() => <SearchStackNavigator />}
       </Tab.Screen>
       <Tab.Screen
         name="Messages"
         options={{ tabBarLabel: Strings.tabMessages }}
       >
-        {() => <PlaceholderScreen title={Strings.tabMessages} />}
+        {() => <MessagesStackNavigator />}
       </Tab.Screen>
       <Tab.Screen name="Like" options={{ tabBarLabel: Strings.tabLike }}>
         {() => <LikeStackNavigator />}
       </Tab.Screen>
       <Tab.Screen name="Profile" options={{ tabBarLabel: Strings.tabProfile }}>
-        {() => <PlaceholderScreen title={Strings.tabProfile} />}
+        {() => <ProfileStackNavigator />}
       </Tab.Screen>
     </Tab.Navigator>
   );

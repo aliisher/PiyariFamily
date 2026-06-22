@@ -51,6 +51,8 @@ type SuggestedMatch = {
   location: string;
   profession: string;
   image: ImageSourcePropType;
+  tier: 'VIP' | 'VVIP';
+  isVerified: boolean;
 };
 
 const FEATURED_MATCHES: FeaturedMatch[] = [
@@ -104,14 +106,18 @@ const SUGGESTED_MATCHES: SuggestedMatch[] = [
     location: 'Lahore',
     profession: 'Designer',
     image: Images.femaleProfile,
+    tier: 'VIP',
+    isVerified: true,
   },
   {
     id: '2',
     name: 'Rohan',
     age: 29,
     location: 'Karachi',
-    profession: 'Software Engineer',
+    profession: 'Engineer',
     image: Images.maleProfile,
+    tier: 'VVIP',
+    isVerified: true,
   },
 ];
 
@@ -311,51 +317,53 @@ const HomeScreen = () => {
                   style={styles.suggestedImage}
                   resizeMode="cover"
                 />
-                <View style={styles.suggestedVerified}>
-                  <Image
-                    source={Images.verifiedIcon}
-                    style={styles.suggestedVerifiedIcon}
-                    resizeMode="contain"
-                    tintColor={Colors.white}
+                {match.isVerified ? (
+                  <View style={styles.suggestedVerifyBadge}>
+                    <Icon
+                      name="shield-check"
+                      size={fs(11)}
+                      color={Colors.white}
+                    />
+                  </View>
+                ) : null}
+                <View style={styles.suggestedTierBadge}>
+                  <Icon
+                    name={match.tier === 'VIP' ? 'star' : 'crown'}
+                    size={fs(10)}
+                    color={Colors.white}
                   />
-                  <Text style={styles.suggestedVerifiedText}>
-                    {Strings.verifiedBadge}
-                  </Text>
+                  <Text style={styles.suggestedTierText}>{match.tier}</Text>
                 </View>
               </View>
 
               <View style={styles.suggestedBody}>
-                <View style={styles.suggestedInfo}>
-                  <Text style={styles.suggestedName}>
-                    {match.name}, {match.age}
-                  </Text>
-                  <View style={styles.suggestedLocationRow}>
-                    <Icon
-                      name="map-marker-outline"
-                      size={fs(11)}
-                      color={Colors.textLight}
-                    />
-                    <Text style={styles.suggestedLocation}>
-                      {match.location}
+                <Text style={styles.suggestedName}>
+                  {match.name}, {match.age}
+                </Text>
+                <View style={styles.suggestedLocationRow}>
+                  <Icon
+                    name="map-marker-outline"
+                    size={fs(11)}
+                    color={Colors.textLight}
+                  />
+                  <Text style={styles.suggestedLocation}>{match.location}</Text>
+                </View>
+                <View style={styles.suggestedBottomRow}>
+                  <View style={styles.professionTag}>
+                    <Text style={styles.professionText}>
+                      {match.profession}
                     </Text>
                   </View>
-                  <View style={styles.suggestedBottomRow}>
-                    <View style={styles.professionTag}>
-                      <Text style={styles.professionText}>
-                        {match.profession}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      style={styles.suggestedLikeBtn}
-                      activeOpacity={0.85}
-                    >
-                      <Icon
-                        name="heart-outline"
-                        size={fs(17)}
-                        color={Colors.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    style={styles.suggestedLikeBtn}
+                    activeOpacity={0.85}
+                  >
+                    <Icon
+                      name="heart-outline"
+                      size={fs(16)}
+                      color={Colors.primary}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             </TouchableOpacity>
@@ -619,33 +627,46 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#F0F0F0',
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 3,
   },
   suggestedImageWrap: {
     width: '100%',
-    height: hp('17%'),
+    height: hp('15.5%'),
     position: 'relative',
+    backgroundColor: Colors.gradientStart,
   },
   suggestedImage: {
     width: '100%',
     height: '100%',
   },
-  suggestedVerified: {
+  suggestedVerifyBadge: {
     position: 'absolute',
-    top: hp('0.9%'),
+    top: hp('0.8%'),
+    left: wp('2%'),
+    width: wp('6%'),
+    height: wp('6%'),
+    borderRadius: wp('3%'),
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  suggestedTierBadge: {
+    position: 'absolute',
+    top: hp('0.8%'),
     right: wp('2%'),
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('0.6%'),
+    gap: wp('0.8%'),
     backgroundColor: Colors.gold,
     paddingHorizontal: wp('2%'),
     paddingVertical: hp('0.3%'),
     borderRadius: wp('2.5%'),
   },
-  suggestedVerifiedIcon: {
-    width: fs(12),
-    height: fs(12),
-  },
-  suggestedVerifiedText: {
+  suggestedTierText: {
     fontSize: fs(9),
     fontFamily: Fonts.semiBold,
     color: Colors.white,
@@ -653,22 +674,19 @@ const styles = StyleSheet.create({
   suggestedBody: {
     paddingHorizontal: wp('3%'),
     paddingTop: hp('1%'),
-    paddingBottom: hp('1.2%'),
-  },
-  suggestedInfo: {
-    flex: 1,
+    paddingBottom: hp('1.1%'),
   },
   suggestedName: {
     fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.primary,
-    marginBottom: hp('0.25%'),
+    marginBottom: hp('0.2%'),
   },
   suggestedLocationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('0.6%'),
-    marginBottom: hp('0.8%'),
+    gap: wp('0.5%'),
+    marginBottom: hp('0.9%'),
   },
   suggestedLocation: {
     fontSize: fs(11),
@@ -682,21 +700,22 @@ const styles = StyleSheet.create({
   },
   professionTag: {
     backgroundColor: Colors.suggestedTagBg,
-    paddingHorizontal: wp('2.5%'),
-    paddingVertical: hp('0.35%'),
-    borderRadius: wp('2.5%'),
+    paddingHorizontal: wp('2.8%'),
+    paddingVertical: hp('0.4%'),
+    borderRadius: wp('3%'),
+    maxWidth: '68%',
   },
   professionText: {
-    fontSize: fs(11),
+    fontSize: fs(10),
     fontFamily: Fonts.medium,
     color: Colors.primary,
   },
   suggestedLikeBtn: {
-    width: wp('9%'),
-    height: wp('9%'),
-    borderRadius: wp('4.5%'),
+    width: wp('8.5%'),
+    height: wp('8.5%'),
+    borderRadius: wp('4.25%'),
     borderWidth: 1,
-    borderColor: '#E8E8E8',
+    borderColor: Colors.focusBorder,
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',

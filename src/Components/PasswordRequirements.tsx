@@ -11,11 +11,14 @@ type Props = {
 };
 
 const requirements = [
-  { label: 'At least 8+ characters', test: (p: string) => p.length >= 8 },
-  { label: 'At least One uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
-  { label: 'At least One number', test: (p: string) => /[0-9]/.test(p) },
+  { label: 'At least 8 Characters', test: (p: string) => p.length >= 8 },
   {
-    label: 'At least One special char',
+    label: 'At least One Uppercase Letter',
+    test: (p: string) => /[A-Z]/.test(p),
+  },
+  { label: 'At least One Number', test: (p: string) => /[0-9]/.test(p) },
+  {
+    label: 'At least One Special Character',
     test: (p: string) => /[^A-Za-z0-9]/.test(p),
   },
 ];
@@ -33,7 +36,9 @@ const PasswordRequirements = ({ password }: Props) => {
               color={met ? '#4CAF50' : Colors.border}
               style={styles.icon}
             />
-            <Text style={[styles.text, met && styles.textMet]}>{item.label}</Text>
+            <Text style={[styles.text, met && styles.textMet]}>
+              {item.label}
+            </Text>
           </View>
         );
       })}
