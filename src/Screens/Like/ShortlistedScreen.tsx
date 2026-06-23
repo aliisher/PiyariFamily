@@ -12,7 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import {
@@ -92,21 +92,19 @@ const ShortlistedScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <BackButton
-          variant="pink"
-          compact
-          onPress={() => navigation.getParent()?.navigate('Home')}
-        />
-        <Text style={styles.headerTitle}>{Strings.shortlisted}</Text>
-        <TouchableOpacity
-          style={styles.filterBtn}
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate('FilterMatches')}
-        >
-          <Icon name="tune-variant" size={fs(22)} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title={Strings.shortlisted}
+        onBack={() => navigation.getParent()?.navigate('Home')}
+        rightElement={
+          <TouchableOpacity
+            style={styles.filterBtn}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('FilterMatches')}
+          >
+            <Icon name="tune-variant" size={fs(22)} color={Colors.primary} />
+          </TouchableOpacity>
+        }
+      />
 
       <View style={styles.tabRow}>
         <TouchableOpacity
@@ -155,19 +153,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1%'),
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
   },
   filterBtn: {
     width: wp('10.7%'),

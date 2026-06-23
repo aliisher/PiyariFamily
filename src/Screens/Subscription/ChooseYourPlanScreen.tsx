@@ -15,6 +15,7 @@ import {
 } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PrimaryButton from '../../Components/PrimaryButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
@@ -92,17 +93,19 @@ const ChooseYourPlanScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.heartBtn}
-          activeOpacity={0.85}
-          onPress={() => navigation.goBack()}
-        >
-          <Icon name="heart" size={fs(18)} color={Colors.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{Strings.chooseYourPlan}</Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <ScreenHeader
+        title={Strings.chooseYourPlan}
+        compact
+        leftElement={
+          <TouchableOpacity
+            style={styles.heartBtn}
+            activeOpacity={0.85}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon name="heart" size={fs(18)} color={Colors.white} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -213,13 +216,6 @@ const ChooseYourPlanScreen = () => {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.background },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1%'),
-  },
   heartBtn: {
     width: wp('10.5%'),
     height: wp('10.5%'),
@@ -227,15 +223,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: fs(18),
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSpacer: {
-    width: wp('10.5%'),
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,

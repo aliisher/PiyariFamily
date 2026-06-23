@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import PasswordStrengthMeter from '../../Components/PasswordStrengthMeter';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
@@ -128,15 +128,11 @@ const ChangePasswordScreen = () => {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.flex}>
-          <View style={styles.header}>
-            <BackButton
-              variant="pink"
-              compact
-              onPress={() => navigation.goBack()}
-            />
-            <Text style={styles.headerTitle}>{Strings.changePassword}</Text>
-            <View style={styles.headerSpacer} />
-          </View>
+          <ScreenHeader
+            title={Strings.changePassword}
+            onBack={() => navigation.goBack()}
+            style={styles.screenHeader}
+          />
 
           <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}
@@ -253,22 +249,9 @@ const styles = StyleSheet.create({
     right: 0,
     height: hp('18%'),
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
+  screenHeader: {
     marginBottom: hp('1%'),
     zIndex: 1,
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSpacer: {
-    width: AuthStyles.backButtonSize,
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,

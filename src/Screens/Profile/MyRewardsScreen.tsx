@@ -13,7 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import {
   REDEEM_OPTIONS,
   REFERRAL_HISTORY,
@@ -41,11 +41,11 @@ const MyRewardsScreen = () => {
         style={styles.topGlow}
       />
 
-      <View style={styles.header}>
-        <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
-        <Text style={styles.headerTitle}>{Strings.myRewards}</Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <ScreenHeader
+        title={Strings.myRewards}
+        onBack={() => navigation.goBack()}
+        style={styles.screenHeader}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -150,22 +150,9 @@ const styles = StyleSheet.create({
     right: 0,
     height: hp('18%'),
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
+  screenHeader: {
     marginBottom: hp('1%'),
     zIndex: 1,
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSpacer: {
-    width: AuthStyles.backButtonSize,
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,

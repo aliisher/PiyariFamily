@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { ACTIVE_USERS, CONVERSATIONS } from '../../Constant/Messages';
 import { Colors } from '../../Constant/Colors';
@@ -35,18 +35,20 @@ const MessagesScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
-        <Text style={styles.headerTitle}>{Strings.messagesTitle}</Text>
-        <TouchableOpacity
-          style={styles.notificationBtn}
-          activeOpacity={0.8}
-          onPress={() => navigateToProfileScreen(navigation, 'Notifications')}
-        >
-          <Icon name="bell-outline" size={fs(20)} color={Colors.primary} />
-          <View style={styles.notificationDot} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title={Strings.messagesTitle}
+        onBack={() => navigation.goBack()}
+        rightElement={
+          <TouchableOpacity
+            style={styles.notificationBtn}
+            activeOpacity={0.8}
+            onPress={() => navigateToProfileScreen(navigation, 'Notifications')}
+          >
+            <Icon name="bell-outline" size={fs(20)} color={Colors.primary} />
+            <View style={styles.notificationDot} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -176,19 +178,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1.5%'),
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
   },
   notificationBtn: {
     width: wp('12%'),

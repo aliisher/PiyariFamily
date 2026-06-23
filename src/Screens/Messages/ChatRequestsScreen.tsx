@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { CHAT_REQUESTS } from '../../Constant/Messages';
 import { Colors } from '../../Constant/Colors';
@@ -32,23 +32,18 @@ const ChatRequestsScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <BackButton
-          variant="pink"
-          compact
-          onPress={() => navigation.goBack()}
-        />
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>{Strings.chatRequests}</Text>
-          <Text style={styles.headerSubtitle}>
-            {Strings.reviewBeforeAccepting}
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.notificationBtn} activeOpacity={0.8}>
-          <Icon name="bell-outline" size={fs(20)} color={Colors.primary} />
-          <View style={styles.notificationDot} />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title={Strings.chatRequests}
+        subtitle={Strings.reviewBeforeAccepting}
+        onBack={() => navigation.goBack()}
+        align="flex-start"
+        rightElement={
+          <TouchableOpacity style={styles.notificationBtn} activeOpacity={0.8}>
+            <Icon name="bell-outline" size={fs(20)} color={Colors.primary} />
+            <View style={styles.notificationDot} />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -148,30 +143,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1.5%'),
-  },
-  headerCenter: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: hp('0.3%'),
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSubtitle: {
-    fontSize: fs(12),
-    fontFamily: Fonts.regular,
-    color: Colors.textLight,
-    marginTop: hp('0.3%'),
   },
   notificationBtn: {
     width: wp('12%'),

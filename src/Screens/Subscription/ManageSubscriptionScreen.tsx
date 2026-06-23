@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import { AuthStyles } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
@@ -74,17 +74,12 @@ const ManageSubscriptionScreen = () => {
         style={styles.topGlow}
       />
 
-      <View style={styles.header}>
-        <BackButton
-          variant="pink"
-          compact
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={styles.headerTitle}>
-          {Strings.manageSubscriptionTitle}
-        </Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <ScreenHeader
+        title={Strings.manageSubscriptionTitle}
+        onBack={() => navigation.goBack()}
+        compact
+        style={styles.header}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -168,23 +163,8 @@ const styles = StyleSheet.create({
     height: hp('14%'),
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
     marginBottom: hp('2%'),
     zIndex: 1,
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: fs(18),
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    textAlign: 'center',
-    letterSpacing: -0.4,
-  },
-  headerSpacer: {
-    width: AuthStyles.backButtonSize,
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,

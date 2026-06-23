@@ -13,7 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import FilterChip from '../../Components/FilterChip';
 import FilterRangeSlider from '../../Components/FilterRangeSlider';
 import PrimaryButton from '../../Components/PrimaryButton';
@@ -66,16 +66,17 @@ const FilterMatchesScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
-          <Text style={styles.headerTitle}>{Strings.filterMatches}</Text>
+      <ScreenHeader
+        title={Strings.filterMatches}
+        subtitle={Strings.filterMatchesSubtitle}
+        subtitleLayout="below"
+        onBack={() => navigation.goBack()}
+        rightElement={
           <TouchableOpacity activeOpacity={0.85} onPress={handleReset}>
             <Text style={styles.resetText}>{Strings.reset}</Text>
           </TouchableOpacity>
-        </View>
-        <Text style={styles.headerSubtitle}>{Strings.filterMatchesSubtitle}</Text>
-      </View>
+        }
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -230,30 +231,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1.5%'),
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: hp('0.5%'),
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSubtitle: {
-    fontSize: fs(13),
-    fontFamily: Fonts.regular,
-    color: Colors.textLight,
-    textAlign: 'center',
-    lineHeight: hp('2.1%'),
-    paddingHorizontal: wp('8%'),
   },
   resetText: {
     fontSize: fs(13),

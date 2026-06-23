@@ -15,14 +15,14 @@ import {
 } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import PrimaryButton from '../../Components/PrimaryButton';
 import {
   REFERRAL_LINK,
   REFERRAL_REWARDS_TABLE,
   REFERRAL_STATS,
 } from '../../Constant/Referrals';
-import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
+import { AuthStyles } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
@@ -52,15 +52,12 @@ const ReferralProgramScreen = () => {
         style={styles.topGlow}
       />
 
-      <View style={styles.header}>
-        <BackButton
-          variant="pink"
-          compact
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={styles.headerTitle}>{Strings.referralProgram}</Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <ScreenHeader
+        title={Strings.referralProgram}
+        onBack={() => navigation.goBack()}
+        compact
+        style={styles.header}
+      />
 
       <View style={styles.body}>
         <ScrollView
@@ -68,103 +65,105 @@ const ReferralProgramScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-        <LinearGradient
-          colors={[Colors.primary, Colors.primaryDark]}
-          style={styles.heroCard}
-        >
-          <View style={styles.crownRing}>
-            <Icon name="crown" size={fs(26)} color={Colors.gold} />
-          </View>
-
-          <Text style={styles.heroTitle}>{Strings.inviteAndEarnRewards}</Text>
-          <Text style={styles.heroSubtitle}>{Strings.inviteEarnSubtitle}</Text>
-
-          <View style={styles.heroBadge}>
-            <Text style={styles.heroBadgeText}>
-              {Strings.rewardsOnRegistrationOnly}
-            </Text>
-            <Icon name="check" size={fs(11)} color={Colors.white} />
-          </View>
-        </LinearGradient>
-
-        <Text style={styles.sectionLabel}>{Strings.yourReferralLink}</Text>
-        <View style={styles.linkBox}>
-          <Text style={styles.linkText} numberOfLines={1}>
-            {REFERRAL_LINK}
-          </Text>
-          <TouchableOpacity
-            style={styles.linkCopyBtn}
-            activeOpacity={0.85}
-            onPress={handleCopy}
+          <LinearGradient
+            colors={[Colors.primary, Colors.primaryDark]}
+            style={styles.heroCard}
           >
-            <Icon name="content-copy" size={fs(16)} color={Colors.gold} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.actionRow}>
-          <TouchableOpacity
-            style={styles.copyBtn}
-            activeOpacity={0.88}
-            onPress={handleCopy}
-          >
-            <Icon name="content-copy" size={fs(15)} color={Colors.white} />
-            <Text style={styles.copyBtnText}>{Strings.copyLink}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.whatsappBtn} activeOpacity={0.88}>
-            <Icon name="whatsapp" size={fs(15)} color={Colors.primary} />
-            <Text style={styles.whatsappBtnText}>{Strings.whatsapp}</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.sectionLabel}>{Strings.rewardsTable}</Text>
-        <View style={styles.tableCard}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.tableHeaderText}>
-              {Strings.successfulRegistrations}
-            </Text>
-            <Text style={[styles.tableHeaderText, styles.tableHeaderRight]}>
-              {Strings.pointsEarnedLabel}
-            </Text>
-          </View>
-          <View style={styles.tableDivider} />
-          {REFERRAL_REWARDS_TABLE.map(row => (
-            <View key={row.id} style={styles.tableRow}>
-              <Text style={styles.tableCell}>{row.registrations}</Text>
-              <Text style={styles.tableCellBold}>{row.points}</Text>
+            <View style={styles.crownRing}>
+              <Icon name="crown" size={fs(26)} color={Colors.gold} />
             </View>
-          ))}
-        </View>
 
-        <Text style={styles.sectionLabel}>{Strings.yourStats}</Text>
-        <View style={styles.statsRow}>
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <Icon
-                name="account-plus-outline"
-                size={fs(20)}
-                color={Colors.gold}
-              />
+            <Text style={styles.heroTitle}>{Strings.inviteAndEarnRewards}</Text>
+            <Text style={styles.heroSubtitle}>
+              {Strings.inviteEarnSubtitle}
+            </Text>
+
+            <View style={styles.heroBadge}>
+              <Text style={styles.heroBadgeText}>
+                {Strings.rewardsOnRegistrationOnly}
+              </Text>
+              <Icon name="check" size={fs(11)} color={Colors.white} />
             </View>
-            <Text style={styles.statValue}>{REFERRAL_STATS.registered}</Text>
-            <Text style={styles.statLabel}>{Strings.registered}</Text>
+          </LinearGradient>
+
+          <Text style={styles.sectionLabel}>{Strings.yourReferralLink}</Text>
+          <View style={styles.linkBox}>
+            <Text style={styles.linkText} numberOfLines={1}>
+              {REFERRAL_LINK}
+            </Text>
+            <TouchableOpacity
+              style={styles.linkCopyBtn}
+              activeOpacity={0.85}
+              onPress={handleCopy}
+            >
+              <Icon name="content-copy" size={fs(16)} color={Colors.gold} />
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.statCard}>
-            <View style={styles.statIconBox}>
-              <Icon name="star" size={fs(20)} color={Colors.gold} />
-            </View>
-            <Text style={styles.statValue}>
-              {REFERRAL_STATS.pointsEarned} pts
-            </Text>
-            <Text style={styles.statLabel}>{Strings.pointsEarnedStat}</Text>
-          </View>
-        </View>
+          <View style={styles.actionRow}>
+            <TouchableOpacity
+              style={styles.copyBtn}
+              activeOpacity={0.88}
+              onPress={handleCopy}
+            >
+              <Icon name="content-copy" size={fs(15)} color={Colors.white} />
+              <Text style={styles.copyBtnText}>{Strings.copyLink}</Text>
+            </TouchableOpacity>
 
-        <View style={styles.noteBox}>
-          <Icon name="shield-check" size={fs(16)} color={Colors.primary} />
-          <Text style={styles.noteText}>{Strings.referralPointsNote}</Text>
-        </View>
+            <TouchableOpacity style={styles.whatsappBtn} activeOpacity={0.88}>
+              <Icon name="whatsapp" size={fs(15)} color={Colors.primary} />
+              <Text style={styles.whatsappBtnText}>{Strings.whatsapp}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.sectionLabel}>{Strings.rewardsTable}</Text>
+          <View style={styles.tableCard}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderText}>
+                {Strings.successfulRegistrations}
+              </Text>
+              <Text style={[styles.tableHeaderText, styles.tableHeaderRight]}>
+                {Strings.pointsEarnedLabel}
+              </Text>
+            </View>
+            <View style={styles.tableDivider} />
+            {REFERRAL_REWARDS_TABLE.map(row => (
+              <View key={row.id} style={styles.tableRow}>
+                <Text style={styles.tableCell}>{row.registrations}</Text>
+                <Text style={styles.tableCellBold}>{row.points}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.sectionLabel}>{Strings.yourStats}</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statCard}>
+              <View style={styles.statIconBox}>
+                <Icon
+                  name="account-plus-outline"
+                  size={fs(20)}
+                  color={Colors.gold}
+                />
+              </View>
+              <Text style={styles.statValue}>{REFERRAL_STATS.registered}</Text>
+              <Text style={styles.statLabel}>{Strings.registered}</Text>
+            </View>
+
+            <View style={styles.statCard}>
+              <View style={styles.statIconBox}>
+                <Icon name="star" size={fs(20)} color={Colors.gold} />
+              </View>
+              <Text style={styles.statValue}>
+                {REFERRAL_STATS.pointsEarned} pts
+              </Text>
+              <Text style={styles.statLabel}>{Strings.pointsEarnedStat}</Text>
+            </View>
+          </View>
+
+          <View style={styles.noteBox}>
+            <Icon name="shield-check" size={fs(16)} color={Colors.primary} />
+            <Text style={styles.noteText}>{Strings.referralPointsNote}</Text>
+          </View>
         </ScrollView>
 
         <View
@@ -197,21 +196,8 @@ const styles = StyleSheet.create({
     height: hp('16%'),
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
     marginBottom: hp('1.2%'),
     zIndex: 1,
-  },
-  headerTitle: {
-    fontSize: fs(18),
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
-  },
-  headerSpacer: {
-    width: AuthStyles.backButtonSize,
   },
   body: {
     flex: 1,

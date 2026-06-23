@@ -14,7 +14,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
@@ -103,17 +103,17 @@ const ComparePlansScreen = () => {
           style={styles.topGlow}
         />
 
-        <View style={styles.header}>
-          <BackButton
-            variant="pink"
-            compact
-            onPress={() => navigation.goBack()}
-          />
-          <Text style={styles.headerTitle}>{Strings.comparePlansTitle}</Text>
-          <TouchableOpacity activeOpacity={0.85} style={styles.helpBtn}>
-            <Text style={styles.helpLink}>{Strings.helpQuestion}</Text>
-          </TouchableOpacity>
-        </View>
+        <ScreenHeader
+          title={Strings.comparePlansTitle}
+          onBack={() => navigation.goBack()}
+          compact
+          style={styles.header}
+          rightElement={
+            <TouchableOpacity activeOpacity={0.85} style={styles.helpBtn}>
+              <Text style={styles.helpLink}>{Strings.helpQuestion}</Text>
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -182,19 +182,8 @@ const styles = StyleSheet.create({
     height: hp('18%'),
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: AuthStyles.horizontalPadding,
     marginBottom: hp('2.2%'),
     zIndex: 1,
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: fs(18),
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    textAlign: 'center',
-    letterSpacing: -0.4,
   },
   helpBtn: {
     minWidth: AuthStyles.backButtonSize,

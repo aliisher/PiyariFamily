@@ -19,7 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import { Images } from '../../Assets';
-import BackButton from '../../Components/BackButton';
+import ScreenHeader from '../../Components/ScreenHeader';
 import PrimaryButton from '../../Components/PrimaryButton';
 import SetupDropdown from '../../Components/SetupDropdown';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
@@ -117,13 +117,15 @@ const EditProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <BackButton variant="pink" compact onPress={() => navigation.goBack()} />
-        <Text style={styles.headerTitle}>{Strings.editProfileTitle}</Text>
-        <TouchableOpacity activeOpacity={0.85} onPress={handleSave}>
-          <Text style={styles.saveText}>{Strings.save}</Text>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title={Strings.editProfileTitle}
+        onBack={() => navigation.goBack()}
+        rightElement={
+          <TouchableOpacity activeOpacity={0.85} onPress={handleSave}>
+            <Text style={styles.saveText}>{Strings.save}</Text>
+          </TouchableOpacity>
+        }
+      />
 
       <KeyboardAvoidingView
         style={styles.flex}
@@ -523,19 +525,6 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    marginBottom: hp('1%'),
-  },
-  headerTitle: {
-    fontSize: FontSizes.h3,
-    fontFamily: Fonts.bold,
-    color: Colors.primary,
-    letterSpacing: -0.2,
   },
   saveText: {
     fontSize: fs(14),
