@@ -9,7 +9,7 @@ export const Colors = {
   gradientEnd: '#FFFFFF',
   text: '#71717B',
   textSecondary: '#6B6B6B',
-  textLight: '#9E9E9E',
+  textLight: '#71717B',
   label: '#2C2C2C',
   placeholder: '#B0B0B0',
   border: '#C8C8C8',

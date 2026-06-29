@@ -135,14 +135,16 @@ const CompletePaymentScreen = () => {
             activeOpacity={0.9}
             onPress={handlePay}
           >
-            <Icon name="lock-outline" size={fs(18)} color={Colors.white} />
-            <Text style={styles.secureBarText}>
-              {Strings.paySecurely.replace(
-                '{amount}',
-                priceLabel.replace('PKR ', ''),
-              )}
-            </Text>
-            <Icon name="arrow-right" size={fs(18)} color={Colors.white} />
+            <View style={styles.secureBarContent}>
+              <Icon name="lock-outline" size={fs(18)} color={Colors.white} />
+              <Text style={styles.secureBarText}>
+                {Strings.paySecurely.replace(
+                  '{amount}',
+                  priceLabel.replace('PKR ', ''),
+                )}
+              </Text>
+              <Icon name="arrow-right" size={fs(18)} color={Colors.white} />
+            </View>
           </TouchableOpacity>
 
           <View style={styles.planSummary}>
@@ -294,14 +296,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('4.5%'),
     paddingVertical: hp('1.6%'),
     marginBottom: hp('2%'),
-    gap: wp('2.5%'),
+  },
+  secureBarContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: wp('2%'),
   },
   secureBarText: {
-    flex: 1,
     fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.white,
-    textAlign: 'center',
   },
   planSummary: {
     flexDirection: 'row',

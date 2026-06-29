@@ -67,7 +67,9 @@ const LoginScreen = ({ navigation }: Props) => {
               <AuthHeader />
 
               <View style={styles.formSection}>
-                <Text style={styles.title}>{Strings.welcomeBack}</Text>
+                <Text style={styles.title}>
+                  {Strings.welcomeBack}, Shahid !
+                </Text>
                 <Text style={styles.subtitle}>{Strings.loginSubtitle}</Text>
 
                 <AuthInput

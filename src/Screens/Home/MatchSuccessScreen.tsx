@@ -8,11 +8,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -47,14 +43,17 @@ const MatchSuccessScreen = () => {
   return (
     <LinearGradient
       colors={[Colors.gradientStart, Colors.gradientMid, Colors.background]}
-      locations={[0, 0.45, 1]}
+      locations={[0, 0.48, 0]}
       style={styles.root}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: insets.top + hp('2%'), paddingBottom: insets.bottom + hp('2%') },
+          {
+            paddingTop: insets.top + hp('2%'),
+            paddingBottom: insets.bottom + hp('2%'),
+          },
         ]}
       >
         <Text style={styles.title}>{Strings.itsAMatch}</Text>
@@ -108,7 +107,11 @@ const MatchSuccessScreen = () => {
         </View>
 
         <TouchableOpacity style={styles.messageBtn} activeOpacity={0.88}>
-          <Icon name="message-text-outline" size={fs(20)} color={Colors.white} />
+          <Icon
+            name="message-text-outline"
+            size={fs(20)}
+            color={Colors.white}
+          />
           <Text style={styles.messageBtnText}>{Strings.sendAMessage}</Text>
         </TouchableOpacity>
 
@@ -270,7 +273,7 @@ const styles = StyleSheet.create({
     height: hp('6.2%'),
     borderRadius: wp('3%'),
     borderWidth: 1.2,
-    borderColor: Colors.primary,
+    borderColor: Colors.focusBorder,
     backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',

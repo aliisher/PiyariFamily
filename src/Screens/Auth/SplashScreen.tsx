@@ -25,11 +25,11 @@ const SplashScreen = ({ navigation }: Props) => {
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
         <View style={styles.content}>
-        <Image
-          source={Images.splashIllustration}
-          style={styles.splashImage}
-          resizeMode="contain"
-        />
+          <Image
+            source={Images.splashIllustration}
+            style={styles.splashImage}
+            resizeMode="contain"
+          />
         </View>
       </SafeAreaView>
     </View>

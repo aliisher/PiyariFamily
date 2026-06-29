@@ -452,6 +452,7 @@ export const Strings = {
     'Welcome to PiyariFamily Premium. Your journey to finding the perfect match just got better!',
   subscriptionActive: 'Subscription Active',
   nextBillingDate: 'Next billing: {date}',
+  profileBoostedFor24Hours: 'Your profile is now boosted for 24 hours',
   startExploringMatches: 'Start Exploring Matches',
   manageSubscription: 'Manage Subscription',
   manageSubscriptionTitle: 'Manage Subscription',

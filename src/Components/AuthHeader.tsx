@@ -25,9 +25,9 @@ const AuthHeader = ({ compact = false }: Props) => {
       <View style={[styles.starDivider, compact && styles.starDividerCompact]}>
         <View style={styles.dividerLine} />
         <Icon
-          name="star-four-points"
+          name="heart"
           size={fs(10)}
-          color={Colors.gold}
+          color={Colors.primaryDark}
           style={styles.starIcon}
         />
         <View style={styles.dividerLine} />
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.gold,
+    backgroundColor: Colors.primaryDark,
     opacity: 0.75,
   },
   starIcon: {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   tagline: {
     fontSize: FontSizes.bodySmall,
-    color: Colors.gold,
+    color: Colors.primaryDark,
     fontFamily: Fonts.medium,
     textAlign: 'center',
     fontStyle: 'italic',

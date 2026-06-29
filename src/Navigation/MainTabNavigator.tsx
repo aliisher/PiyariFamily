@@ -139,11 +139,11 @@ const styles = StyleSheet.create({
   tabLabel: {
     fontSize: fs(11),
     fontFamily: Fonts.medium,
-    marginTop: hp('0.5%'),
+    marginTop: wp('1%'),
   },
   activeIconWrap: {
-    width: wp('11%'),
-    height: wp('11%'),
+    width: wp('10%'),
+    height: wp('10%'),
     borderRadius: wp('3%'),
     backgroundColor: Colors.tabActiveBg,
     alignItems: 'center',

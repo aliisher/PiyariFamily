@@ -17,6 +17,7 @@ import {
 } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
+import AuthStarDivider from '../../Components/AuthStarDivider';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
@@ -37,13 +38,27 @@ type SuccessPerk = {
   label: string;
   icon?: string;
   iconSource?: ImageSourcePropType;
+  iconColor?: string;
 };
 
+const SPARKLE_POSITIONS = [
+  { top: hp('0.5%'), left: wp('6%') },
+  { top: hp('2%'), right: wp('8%') },
+  { top: hp('7%'), left: wp('2%') },
+  { top: hp('5%'), right: wp('3%') },
+  { top: hp('10%'), left: wp('14%') },
+  { top: hp('9%'), right: wp('15%') },
+];
+
 const SUCCESS_PERKS: SuccessPerk[] = [
-  { icon: 'chat-outline', label: 'Unlimited Chats' },
+  {
+    icon: 'message-text-outline',
+    label: 'Unlimited Chats',
+    iconColor: Colors.primary,
+  },
   { iconSource: Images.profileBoostIcon, label: 'Profile Boost' },
-  { icon: 'star-outline', label: 'Super Likes' },
-  { icon: 'shield-check-outline', label: 'See Likes' },
+  { icon: 'star', label: 'Super Likes', iconColor: Colors.gold },
+  { icon: 'eye-outline', label: 'See Likes', iconColor: Colors.primary },
 ];
 
 const PremiumSuccessScreen = () => {
@@ -53,7 +68,7 @@ const PremiumSuccessScreen = () => {
   const { plan, priceLabel } = route.params;
   useHideTabBar();
 
-  const nextBilling = '22 July 2026';
+  const nextBilling = '15 Jan 2026';
   const planLabel = plan === 'VIP' ? Strings.vipPlan : Strings.vvipPlan;
 
   const renderPerkIcon = (perk: SuccessPerk) => {
@@ -67,104 +82,155 @@ const PremiumSuccessScreen = () => {
       );
     }
 
-    return <Icon name={perk.icon!} size={fs(22)} color={Colors.primary} />;
+    return (
+      <Icon
+        name={perk.icon!}
+        size={fs(24)}
+        color={perk.iconColor ?? Colors.primary}
+      />
+    );
   };
 
   return (
-    <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <View style={styles.heroWrap}>
-          <LinearGradient
-            colors={[Colors.primary, Colors.primaryDark]}
-            style={styles.crownOuter}
-          >
-            <View style={styles.crownInner}>
-              <Icon name="crown" size={fs(44)} color={Colors.gold} />
-            </View>
-          </LinearGradient>
-        </View>
+    <View style={styles.root}>
+      <LinearGradient
+        colors={[Colors.gradientStart, Colors.gradientMid, Colors.gradientEnd]}
+        locations={[0, 0.4, 0]}
+        style={styles.gradient}
+      />
 
-        <Text style={styles.title}>{Strings.yourePremiumNow}</Text>
-        <Text style={styles.subtitle}>{Strings.premiumWelcomeMessage}</Text>
-
-        <View style={styles.detailsCard}>
-          <View style={styles.activePill}>
-            <Icon name="check-circle" size={fs(14)} color="#2E7D32" />
-            <Text style={styles.activeText}>{Strings.subscriptionActive}</Text>
-          </View>
-
-          <View style={styles.planRow}>
-            <Text style={styles.planText}>{planLabel}</Text>
-            <Text style={styles.planPrice}>
-              {priceLabel}
-              {Strings.perMonth}
-            </Text>
-          </View>
-
-          <Text style={styles.billingText}>
-            {Strings.nextBillingDate.replace('{date}', nextBilling)}
-          </Text>
-        </View>
-
-        <View style={styles.perksGrid}>
-          {SUCCESS_PERKS.map(perk => (
-            <View key={perk.label} style={styles.perkCard}>
-              <View style={styles.perkIconWrap}>{renderPerkIcon(perk)}</View>
-              <Text style={styles.perkLabel}>{perk.label}</Text>
-            </View>
-          ))}
-        </View>
-        <Text style={styles.perksGridTitle}>
-          Your profile is now boosted for 24 hours
-        </Text>
-      </ScrollView>
-
-      <View
-        style={[
-          styles.footer,
-          { paddingBottom: getFooterBottomPadding(insets.bottom) },
-        ]}
-      >
-        <PrimaryButton
-          title={Strings.startExploringMatches}
-          onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Settings' }],
-            })
-          }
-          showArrow
-        />
-        <TouchableOpacity
-          style={styles.manageLinkWrap}
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate('ManageSubscription')}
+      <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
         >
-          <Text style={styles.manageLink}>{Strings.manageSubscription}</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <View style={styles.heroWrap}>
+            {SPARKLE_POSITIONS.map((pos, index) => (
+              <Icon
+                key={index}
+                name="star-four-points"
+                size={fs(index % 2 === 0 ? 10 : 8)}
+                color={Colors.goldLight}
+                style={[styles.sparkle, pos]}
+              />
+            ))}
+
+            <View style={styles.crownCircle}>
+              <Icon name="crown-outline" size={fs(44)} color={Colors.white} />
+            </View>
+          </View>
+
+          <Text style={styles.title}>{Strings.yourePremiumNow}</Text>
+
+          <AuthStarDivider
+            icon="heart"
+            width="52%"
+            heartImage={Images.heartIcon}
+            style={styles.heartDivider}
+          />
+
+          <Text style={styles.subtitle}>{Strings.premiumWelcomeMessage}</Text>
+
+          <View style={styles.detailsCard}>
+            <View style={styles.activeCheckWrap}>
+              <Icon name="check" size={fs(20)} color={Colors.white} />
+            </View>
+
+            <View style={styles.detailsTextWrap}>
+              <Text style={styles.activeTitle}>
+                {Strings.subscriptionActive}
+              </Text>
+              <Text style={styles.planDetail}>
+                {planLabel} · {priceLabel}
+                {Strings.perMonth}
+              </Text>
+              <Text style={styles.billingText}>
+                {Strings.nextBillingDate.replace('{date}', nextBilling)}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.perksGrid}>
+            {SUCCESS_PERKS.map(perk => (
+              <View key={perk.label} style={styles.perkCard}>
+                {renderPerkIcon(perk)}
+                <Text style={styles.perkLabel}>{perk.label}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.boostText}>
+            {Strings.profileBoostedFor24Hours}
+          </Text>
+        </ScrollView>
+
+        <View
+          style={[
+            styles.footer,
+            { paddingBottom: getFooterBottomPadding(insets.bottom) },
+          ]}
+        >
+          <PrimaryButton
+            title={Strings.startExploringMatches}
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Settings' }],
+              })
+            }
+            showArrow
+          />
+          <TouchableOpacity
+            style={styles.manageLinkWrap}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate('ManageSubscription')}
+          >
+            <Text style={styles.manageLink}>{Strings.manageSubscription}</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.background },
+  root: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  gradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  safeArea: {
+    flex: 1,
+  },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
-    paddingTop: hp('2.5%'),
+    paddingTop: hp('2%'),
     paddingBottom: hp('2%'),
     alignItems: 'center',
   },
   heroWrap: {
-    marginBottom: hp('2%'),
+    width: wp('40%'),
+    height: wp('40%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: hp('1.5%'),
+    position: 'relative',
   },
-  crownOuter: {
+  sparkle: {
+    position: 'absolute',
+    opacity: 0.9,
+  },
+  crownCircle: {
     width: wp('30%'),
     height: wp('30%'),
     borderRadius: wp('15%'),
+    backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: Colors.primary,
@@ -173,23 +239,15 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 8,
   },
-  crownInner: {
-    width: wp('24%'),
-    height: wp('24%'),
-    borderRadius: wp('12%'),
-    borderWidth: 2,
-    borderColor: 'rgba(212, 160, 23, 0.45)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
     fontSize: FontSizes.h2,
     fontFamily: Fonts.bold,
     color: Colors.primary,
     textAlign: 'center',
-    marginBottom: hp('0.8%'),
     letterSpacing: -0.3,
+  },
+  heartDivider: {
+    marginVertical: hp('1.2%'),
   },
   subtitle: {
     fontSize: FontSizes.body,
@@ -197,52 +255,46 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     textAlign: 'center',
     lineHeight: hp('2.4%'),
-    marginBottom: hp('2.5%'),
+    marginBottom: hp('2.2%'),
     paddingHorizontal: wp('2%'),
   },
   detailsCard: {
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.tabActiveBg,
-    borderRadius: wp('4.5%'),
+    borderRadius: wp('4%'),
     borderWidth: 1,
     borderColor: Colors.focusBorder,
-    padding: wp('4.5%'),
-    marginBottom: hp('2.2%'),
+    padding: wp('4%'),
+    marginBottom: hp('2%'),
+    gap: wp('3.5%'),
   },
-  activePill: {
-    flexDirection: 'row',
+  activeCheckWrap: {
+    width: wp('11%'),
+    height: wp('11%'),
+    borderRadius: wp('5.5%'),
+    backgroundColor: Colors.gold,
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: wp('1.5%'),
-    backgroundColor: '#E8F5E9',
-    paddingHorizontal: wp('2.5%'),
-    paddingVertical: hp('0.4%'),
-    borderRadius: wp('2%'),
-    marginBottom: hp('1.2%'),
+    justifyContent: 'center',
   },
-  activeText: {
-    fontSize: fs(12),
-    fontFamily: Fonts.semiBold,
-    color: '#2E7D32',
+  detailsTextWrap: {
+    flex: 1,
   },
-  planRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: hp('0.5%'),
-  },
-  planText: {
-    fontSize: fs(16),
+  activeTitle: {
+    fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.primary,
+    marginBottom: hp('0.3%'),
   },
-  planPrice: {
-    fontSize: fs(16),
-    fontFamily: Fonts.bold,
-    color: Colors.gold,
+  planDetail: {
+    fontSize: fs(12),
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+    marginBottom: hp('0.2%'),
   },
   billingText: {
-    fontSize: fs(12),
+    fontSize: fs(11),
     fontFamily: Fonts.regular,
     color: Colors.textLight,
   },
@@ -256,25 +308,11 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: Colors.tabActiveBg,
     borderRadius: wp('3.5%'),
-    paddingVertical: hp('1.8%'),
+    paddingVertical: hp('2%'),
     paddingHorizontal: wp('3%'),
     alignItems: 'center',
     marginBottom: hp('1.2%'),
-  },
-  perkIconWrap: {
-    width: wp('12%'),
-    height: wp('12%'),
-    borderRadius: wp('3%'),
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: hp('0.8%'),
-  },
-  perksGridTitle: {
-    fontSize: fs(12),
-    fontFamily: Fonts.semiBold,
-    color: Colors.gold,
-    textAlign: 'center',
-    marginTop: hp('1.2%'),
+    gap: hp('0.8%'),
   },
   perkCustomIcon: {
     width: wp('7%'),
@@ -282,17 +320,23 @@ const styles = StyleSheet.create({
   },
   perkLabel: {
     fontSize: fs(12),
-    fontFamily: Fonts.semiBold,
-    color: Colors.primary,
+    fontFamily: Fonts.bold,
+    color: Colors.label,
     textAlign: 'center',
+  },
+  boostText: {
+    fontSize: fs(12),
+    fontFamily: Fonts.regular,
+    fontStyle: 'italic',
+    color: Colors.gold,
+    textAlign: 'center',
+    marginTop: hp('0.5%'),
   },
   footer: {
     width: '100%',
     paddingHorizontal: AuthStyles.horizontalPadding,
-    paddingTop: hp('1.2%'),
-    borderTopWidth: 1,
-    borderTopColor: Colors.divider,
-    backgroundColor: Colors.background,
+    paddingTop: hp('1%'),
+    backgroundColor: 'transparent',
   },
   manageLinkWrap: {
     alignItems: 'center',
