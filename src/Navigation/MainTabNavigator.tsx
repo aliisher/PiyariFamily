@@ -113,7 +113,8 @@ const MainTabNavigator = () => {
         name="Profile"
         options={{ tabBarLabel: Strings.tabProfile }}
         listeners={({ navigation }) => ({
-          tabPress: () => {
+          tabPress: e => {
+            e.preventDefault();
             navigation.navigate('Profile', { screen: 'Settings' });
           },
         })}

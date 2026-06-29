@@ -37,8 +37,8 @@ const isPasswordValid = (password: string) =>
 
 const SetNewPasswordScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const [password, setPassword] = useState('12345678@Aa');
-  const [confirmPassword, setConfirmPassword] = useState('12345678@Aa');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleReset = () => {

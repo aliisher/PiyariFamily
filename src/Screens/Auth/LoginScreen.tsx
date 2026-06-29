@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import {
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import AuthBackground from '../../Components/AuthBackground';
@@ -22,7 +21,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
-import { hp } from '../../Functions/responsive';
+import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
@@ -33,8 +32,8 @@ type Props = {
 
 const LoginScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const [email, setEmail] = useState('alisher6269@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
@@ -52,86 +51,86 @@ const LoginScreen = ({ navigation }: Props) => {
 
   return (
     <AuthBackground>
-      <KeyboardAvoidingView
-        style={styles.root}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
-            style={[
-              styles.container,
-              { paddingBottom: Math.max(insets.bottom, hp('2%')) },
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.root}>
+          <KeyboardAwareScrollView
+            style={styles.scrollView}
+            contentContainerStyle={[
+              styles.scroll,
+              { paddingBottom: Math.max(insets.bottom + hp('2%'), hp('4%')) },
             ]}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            enableOnAndroid
+            bounces={false}
           >
-            <View style={styles.content}>
-              <AuthHeader />
+            <AuthHeader />
 
-              <View style={styles.formSection}>
-                <Text style={styles.title}>
-                  {Strings.welcomeBack}, Shahid !
-                </Text>
-                <Text style={styles.subtitle}>{Strings.loginSubtitle}</Text>
+            <View style={styles.formSection}>
+              <Text style={styles.title}>{Strings.welcomeBack}, Shahid !</Text>
+              <Text style={styles.subtitle}>{Strings.loginSubtitle}</Text>
 
-                <AuthInput
-                  label={Strings.emailLabel}
-                  iconName="email-outline"
-                  placeholder={Strings.emailPlaceholder}
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+              <AuthInput
+                label={Strings.emailLabel}
+                iconName="email-outline"
+                placeholder={Strings.emailPlaceholder}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
 
-                <AuthInput
-                  label={Strings.passwordLabel}
-                  iconName="lock-outline"
-                  placeholder={Strings.passwordPlaceholder}
-                  value={password}
-                  onChangeText={setPassword}
-                  showToggle
-                  secureTextEntry
-                />
+              <AuthInput
+                label={Strings.passwordLabel}
+                iconName="lock-outline"
+                placeholder={Strings.passwordPlaceholder}
+                value={password}
+                onChangeText={setPassword}
+                showToggle
+                secureTextEntry
+              />
 
-                <TouchableOpacity
-                  style={styles.forgotBtn}
-                  activeOpacity={0.7}
-                  onPress={() => navigation.navigate('ForgotPassword')}
-                >
-                  <Text style={styles.forgotText}>
-                    {Strings.forgotPassword}
-                  </Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.forgotBtn}
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('ForgotPassword')}
+              >
+                <Text style={styles.forgotText}>{Strings.forgotPassword}</Text>
+              </TouchableOpacity>
 
-                <PrimaryButton
-                  title={Strings.logIn}
-                  onPress={handleLogin}
-                  loading={loading}
-                />
+              <PrimaryButton
+                title={Strings.logIn}
+                onPress={handleLogin}
+                loading={loading}
+              />
 
-                <DividerOr />
+              <DividerOr />
 
-                <SocialButton
-                  provider="google"
-                  title={Strings.continueGoogle}
-                  onPress={() => Toast.show('Google login coming soon')}
-                />
-                <SocialButton
-                  provider="apple"
-                  title={Strings.continueApple}
-                  onPress={() => Toast.show('Apple login coming soon')}
-                />
-              </View>
+              <SocialButton
+                provider="google"
+                title={Strings.continueGoogle}
+                onPress={() => Toast.show('Google login coming soon')}
+              />
+              <SocialButton
+                provider="apple"
+                title={Strings.continueApple}
+                onPress={() => Toast.show('Apple login coming soon')}
+                style={styles.lastSocialButton}
+              />
             </View>
 
             <AuthFooter
               prefix={Strings.noAccount}
               linkText={Strings.createAccount}
               onPress={() => navigation.navigate('SignUp')}
+              style={styles.footer}
             />
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+
+            <View style={styles.bottomSpacer} />
+          </KeyboardAwareScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     </AuthBackground>
   );
 };
@@ -140,13 +139,11 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
-  container: {
+  scrollView: {
     flex: 1,
-    paddingHorizontal: AuthStyles.horizontalPadding,
-    justifyContent: 'space-between',
   },
-  content: {
-    flexShrink: 1,
+  scroll: {
+    paddingHorizontal: AuthStyles.horizontalPadding,
   },
   formSection: {
     width: '100%',
@@ -174,6 +171,16 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.body,
     color: Colors.gold,
     fontFamily: Fonts.medium,
+  },
+  lastSocialButton: {
+    marginBottom: hp('0.5%'),
+  },
+  footer: {
+    marginTop: wp('1%'),
+    marginBottom: hp('2%'),
+  },
+  bottomSpacer: {
+    height: hp('3%'),
   },
 });
 

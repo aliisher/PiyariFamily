@@ -344,15 +344,7 @@ const HomeScreen = () => {
                   style={styles.suggestedImage}
                   resizeMode="cover"
                 />
-                {match.isVerified ? (
-                  <View style={styles.suggestedVerifyBadge}>
-                    <Icon
-                      name="shield-check"
-                      size={fs(11)}
-                      color={Colors.white}
-                    />
-                  </View>
-                ) : null}
+
                 <View style={styles.suggestedTierBadge}>
                   <Icon
                     name={match.tier === 'VIP' ? 'star' : 'crown'}
@@ -361,6 +353,19 @@ const HomeScreen = () => {
                   />
                   <Text style={styles.suggestedTierText}>{match.tier}</Text>
                 </View>
+
+                {match.isVerified ? (
+                  <View style={styles.suggestedVerifiedRow}>
+                    <Image
+                      source={Images.verifiedIcon}
+                      style={styles.suggestedVerifiedIcon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.suggestedVerifiedText}>
+                      {Strings.verifiedBadge}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
 
               <View style={styles.suggestedBody}>
@@ -702,17 +707,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  suggestedVerifyBadge: {
-    position: 'absolute',
-    top: hp('0.8%'),
-    left: wp('2%'),
-    width: wp('6%'),
-    height: wp('6%'),
-    borderRadius: wp('3%'),
-    backgroundColor: '#22C55E',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   suggestedTierBadge: {
     position: 'absolute',
     top: hp('0.8%'),
@@ -740,6 +734,28 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.bold,
     color: Colors.primary,
     marginBottom: hp('0.2%'),
+  },
+  suggestedVerifiedRow: {
+    position: 'absolute',
+    top: hp('0.8%'),
+    left: wp('2%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('1%'),
+    backgroundColor: Colors.white,
+    paddingHorizontal: wp('2%'),
+    paddingVertical: hp('0.35%'),
+    borderRadius: wp('5.5%'),
+  },
+  suggestedVerifiedIcon: {
+    width: fs(11),
+    height: fs(11),
+    tintColor: Colors.gold,
+  },
+  suggestedVerifiedText: {
+    fontSize: fs(9),
+    fontFamily: Fonts.medium,
+    color: Colors.black,
   },
   suggestedLocationRow: {
     flexDirection: 'row',

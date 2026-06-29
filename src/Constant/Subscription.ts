@@ -27,11 +27,7 @@ export const PLAN_OPTIONS: Record<'VIP' | 'VVIP', PlanOption> = {
   },
 };
 
-export const FREE_FEATURES = [
-  'Basic search',
-  'Limited chats',
-  'No boost',
-];
+export const FREE_FEATURES = ['Basic search', 'Limited chats', 'No boost'];
 
 export const VIP_FEATURES = [
   'Unlimited Chats',
@@ -42,9 +38,9 @@ export const VIP_FEATURES = [
 
 export const VVIP_FEATURES = [
   'Everything in VIP Plan',
-  'Unlimited Chats',
   'Unlimited Super likes',
   'Unlimited Boosts per Month',
+  'See Who Liked You',
   'VVIP Badge',
 ];
 

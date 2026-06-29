@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import { Images } from '../../Assets';
 import AuthBackground from '../../Components/AuthBackground';
@@ -19,7 +20,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
-import { hp } from '../../Functions/responsive';
+import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const SignUpScreen = ({ navigation }: Props) => {
+  const insets = useSafeAreaInsets();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -67,95 +69,108 @@ const SignUpScreen = ({ navigation }: Props) => {
   return (
     <AuthBackground>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAwareScrollView
-          contentContainerStyle={styles.scroll}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          enableOnAndroid
-          bounces={false}
-        >
-          <BackButton onPress={() => navigation.goBack()} />
+        <View style={styles.root}>
+          <KeyboardAwareScrollView
+            style={styles.scrollView}
+            contentContainerStyle={[
+              styles.scroll,
+              { paddingBottom: Math.max(insets.bottom + hp('2%'), hp('4%')) },
+            ]}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            enableOnAndroid
+            bounces={false}
+          >
+            <BackButton onPress={() => navigation.goBack()} />
 
-          <View style={styles.formSection}>
-            <Text style={styles.title}>{Strings.createYourAccount}</Text>
-            <Text style={styles.subtitle}>{Strings.signUpSubtitle}</Text>
+            <View style={styles.formSection}>
+              <Text style={styles.title}>{Strings.createYourAccount}</Text>
+              <Text style={styles.subtitle}>{Strings.signUpSubtitle}</Text>
 
-            <AuthInput
-              label={Strings.fullNameLabel}
-              iconName="account-outline"
-              placeholder={Strings.fullNamePlaceholder}
-              value={fullName}
-              onChangeText={setFullName}
-              autoCapitalize="words"
+              <AuthInput
+                label={Strings.fullNameLabel}
+                iconName="account-outline"
+                placeholder={Strings.fullNamePlaceholder}
+                value={fullName}
+                onChangeText={setFullName}
+                autoCapitalize="words"
+              />
+
+              <AuthInput
+                label={Strings.emailLabel}
+                iconName="email-outline"
+                placeholder={Strings.signUpEmailPlaceholder}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+
+              <AuthInput
+                label={Strings.phoneNumberLabel}
+                iconName="phone-outline"
+                placeholder={Strings.phoneNumberPlaceholder}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+              />
+
+              <AuthInput
+                label={Strings.passwordLabel}
+                iconName="lock-outline"
+                placeholder={Strings.createPasswordPlaceholder}
+                value={password}
+                onChangeText={setPassword}
+                showToggle
+                secureTextEntry
+              />
+
+              <AuthInput
+                label={Strings.confirmPasswordLabel}
+                iconSource={Images.confirmPasswordIcon}
+                placeholder={Strings.confirmPasswordPlaceholder}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+              />
+
+              <TermsCheckbox checked={agreed} onToggle={setAgreed} />
+
+              <PrimaryButton
+                title={Strings.createAccount}
+                onPress={handleSignUp}
+                loading={loading}
+                style={styles.submitButton}
+              />
+            </View>
+
+            <AuthFooter
+              prefix={Strings.alreadyHaveAccount}
+              linkText={Strings.logInLink}
+              onPress={() => navigation.navigate('Login')}
+              style={styles.footer}
             />
 
-            <AuthInput
-              label={Strings.emailLabel}
-              iconName="email-outline"
-              placeholder={Strings.signUpEmailPlaceholder}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-
-            <AuthInput
-              label={Strings.phoneNumberLabel}
-              iconName="phone-outline"
-              placeholder={Strings.phoneNumberPlaceholder}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
-
-            <AuthInput
-              label={Strings.passwordLabel}
-              iconName="lock-outline"
-              placeholder={Strings.createPasswordPlaceholder}
-              value={password}
-              onChangeText={setPassword}
-              showToggle
-              secureTextEntry
-            />
-
-            <AuthInput
-              label={Strings.confirmPasswordLabel}
-              iconSource={Images.confirmPasswordIcon}
-              placeholder={Strings.confirmPasswordPlaceholder}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-            />
-
-            <TermsCheckbox checked={agreed} onToggle={setAgreed} />
-
-            <PrimaryButton
-              title={Strings.createAccount}
-              onPress={handleSignUp}
-              loading={loading}
-            />
-          </View>
-
-          <AuthFooter
-            prefix={Strings.alreadyHaveAccount}
-            linkText={Strings.logInLink}
-            onPress={() => navigation.navigate('Login')}
-          />
-
-          <View style={styles.bottomSpacer} />
-        </KeyboardAwareScrollView>
+            <View style={styles.bottomSpacer} />
+          </KeyboardAwareScrollView>
+        </View>
       </TouchableWithoutFeedback>
     </AuthBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   scroll: {
     flexGrow: 1,
     paddingHorizontal: AuthStyles.horizontalPadding,
     paddingTop: hp('1%'),
-    paddingBottom: hp('2%'),
   },
   formSection: {
     width: '100%',
@@ -164,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.h2,
     color: Colors.primary,
     fontFamily: Fonts.bold,
-    marginBottom: hp('0.75%'),
+    marginBottom: wp('0.75%'),
     letterSpacing: -0.3,
     textAlign: 'center',
   },
@@ -172,12 +187,19 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.body,
     textAlign: 'center',
     color: Colors.gold,
-    marginBottom: hp('3%'),
+    marginBottom: wp('3%'),
     fontFamily: Fonts.regular,
     lineHeight: hp('2.5%'),
   },
+  submitButton: {
+    marginTop: hp('0.5%'),
+  },
+  footer: {
+    marginTop: wp('2.5%'),
+    marginBottom: hp('1%'),
+  },
   bottomSpacer: {
-    height: hp('2%'),
+    height: hp('3%'),
   },
 });
 

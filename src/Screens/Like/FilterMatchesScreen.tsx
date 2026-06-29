@@ -10,7 +10,10 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
 import ScreenHeader from '../../Components/ScreenHeader';
@@ -97,11 +100,19 @@ const FilterMatchesScreen = () => {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Icon name="map-marker-outline" size={fs(18)} color={Colors.primary} />
+            <Icon
+              name="map-marker-outline"
+              size={fs(18)}
+              color={Colors.primary}
+            />
             <Text style={styles.sectionTitle}>{Strings.locationLabel}</Text>
           </View>
           <View style={styles.searchRow}>
-            <Icon name="map-marker-outline" size={fs(18)} color={Colors.textLight} />
+            <Icon
+              name="map-marker-outline"
+              size={fs(18)}
+              color={Colors.textLight}
+            />
             <TextInput
               style={styles.searchInput}
               placeholder={Strings.cityOrState}
@@ -141,7 +152,11 @@ const FilterMatchesScreen = () => {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Icon name="briefcase-outline" size={fs(18)} color={Colors.primary} />
+            <Icon
+              name="briefcase-outline"
+              size={fs(18)}
+              color={Colors.primary}
+            />
             <Text style={styles.sectionTitle}>{Strings.professionLabel}</Text>
           </View>
           <View style={styles.chipRow}>
@@ -180,7 +195,9 @@ const FilterMatchesScreen = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Icon name="heart-outline" size={fs(18)} color={Colors.primary} />
-            <Text style={styles.sectionTitle}>{Strings.maritalStatusDetail}</Text>
+            <Text style={styles.sectionTitle}>
+              {Strings.maritalStatusDetail}
+            </Text>
           </View>
           <View style={styles.chipRow}>
             {MARITAL_OPTIONS.map(option => (

@@ -232,6 +232,7 @@ export const Strings = {
   shortlisted: 'Shortlisted',
   profilesILiked: 'Profiles I Liked',
   likedMe: 'Liked Me',
+  showingProfiles: 'Showing {count} profiles',
   viewProfile: 'View Profile',
   filterMatches: 'Filter Matches',
   filterMatchesSubtitle:

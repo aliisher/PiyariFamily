@@ -9,6 +9,7 @@ import {
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthFooterHint from '../../Components/AuthFooterHint';
@@ -22,7 +23,7 @@ import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
 import { ProfileStackParamList } from '../../Navigation/ProfileStackNavigator';
-import { hp, wp } from '../../Functions/responsive';
+import { hp, wp, fs } from '../../Functions/responsive';
 
 type RouteProps = RouteProp<ProfileStackParamList, 'VerifyProfileCode'>;
 type NavigationProp = NativeStackNavigationProp<
@@ -65,8 +66,23 @@ const VerifyProfileCodeScreen = () => {
 
             <AuthIconBadge iconName="shield-check-outline" />
 
+            <View style={styles.starDivider}>
+              <View style={styles.dividerLine} />
+              <Icon
+                name="heart"
+                size={fs(10)}
+                color={Colors.primaryDark}
+                style={styles.starIcon}
+              />
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Text style={styles.tagline}>{Strings.tagline}</Text>
+
             <Text style={styles.title}>{Strings.enterVerificationCode}</Text>
-            <Text style={styles.subtitle}>{Strings.verifyProfileCodeSubtitle}</Text>
+            <Text style={styles.subtitle}>
+              {Strings.verifyProfileCodeSubtitle}
+            </Text>
 
             <OtpCodeInput value={code} onChangeText={setCode} />
 
@@ -107,13 +123,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: AuthStyles.horizontalPadding,
     paddingTop: hp('1%'),
   },
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('2%'),
+  },
   title: {
     fontSize: FontSizes.h2,
     color: Colors.primary,
     fontFamily: Fonts.bold,
     marginBottom: hp('1%'),
     letterSpacing: -0.3,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   subtitle: {
     fontSize: FontSizes.body,
@@ -121,8 +161,8 @@ const styles = StyleSheet.create({
     marginBottom: hp('3.5%'),
     fontFamily: Fonts.regular,
     lineHeight: hp('2.5%'),
-    textAlign: 'center',
-    paddingHorizontal: wp('2%'),
+    textAlign: 'left',
+    // paddingHorizontal: wp( '2%'),
   },
   flexSpacer: {
     flex: 1,

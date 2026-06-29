@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthFooterHint from '../../Components/AuthFooterHint';
 import AuthSoftGlow from '../../Components/AuthSoftGlow';
-import AuthStarDivider from '../../Components/AuthStarDivider';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
@@ -63,10 +62,21 @@ const ProfileVerifiedScreen = () => {
             </View>
           </View>
 
+          <View style={styles.starDivider}>
+            <View style={styles.dividerLine} />
+            <Icon
+              name="heart"
+              size={fs(10)}
+              color={Colors.primaryDark}
+              style={styles.starIcon}
+            />
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Text style={styles.tagline}>{Strings.tagline}</Text>
+
           <Text style={styles.title}>{Strings.numberVerifiedTitle}</Text>
           <Text style={styles.subtitle}>{Strings.numberVerifiedSubtitle}</Text>
-
-          <AuthStarDivider icon="heart" width="52%" />
         </View>
 
         <View style={styles.bottomSection}>
@@ -135,6 +145,29 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('2.5%'),
   },
   title: {
     fontSize: FontSizes.h2,

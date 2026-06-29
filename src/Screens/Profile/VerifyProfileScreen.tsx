@@ -22,7 +22,7 @@ import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
 import { ProfileStackParamList } from '../../Navigation/ProfileStackNavigator';
-import { hp, wp } from '../../Functions/responsive';
+import { hp, wp, fs } from '../../Functions/responsive';
 
 type NavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
@@ -64,8 +64,23 @@ const VerifyProfileScreen = () => {
 
             <AuthIconBadge iconName="shield-check-outline" />
 
+            <View style={styles.starDivider}>
+              <View style={styles.dividerLine} />
+              <Icon
+                name="heart"
+                size={fs(10)}
+                color={Colors.primaryDark}
+                style={styles.starIcon}
+              />
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Text style={styles.tagline}>{Strings.tagline}</Text>
+
             <Text style={styles.title}>{Strings.verifyYourProfile}</Text>
-            <Text style={styles.subtitle}>{Strings.verifyProfilePhoneSubtitle}</Text>
+            <Text style={styles.subtitle}>
+              {Strings.verifyProfilePhoneSubtitle}
+            </Text>
 
             <AuthInput
               label={Strings.phoneNumberLabel}
@@ -119,13 +134,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: AuthStyles.horizontalPadding,
     paddingTop: hp('1%'),
   },
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('2%'),
+  },
   title: {
     fontSize: FontSizes.h2,
     color: Colors.primary,
     fontFamily: Fonts.bold,
     marginBottom: hp('1%'),
     letterSpacing: -0.3,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   subtitle: {
     fontSize: FontSizes.body,
@@ -133,7 +172,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('3%'),
     fontFamily: Fonts.regular,
     lineHeight: hp('2.5%'),
-    textAlign: 'center',
+    textAlign: 'left',
     paddingHorizontal: wp('2%'),
   },
   hintRow: {

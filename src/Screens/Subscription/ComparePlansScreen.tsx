@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     height: hp('18%'),
   },
   header: {
-    marginBottom: hp('2.2%'),
+    marginVertical: hp('2.2%'),
     zIndex: 1,
   },
   helpBtn: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   tabFree: {
     flex: 1,
-    paddingVertical: hp('1.15%'),
+    paddingVertical: wp('1.15%'),
     borderRadius: wp('4%'),
     backgroundColor: Colors.white,
     borderWidth: 1,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   tabVip: {
     flex: 1,
-    paddingVertical: hp('1.15%'),
+    paddingVertical: wp('1.15%'),
     borderRadius: wp('4%'),
     backgroundColor: '#D4A017',
     alignItems: 'center',
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   tabVvip: {
     flex: 1,
-    paddingVertical: hp('1.15%'),
+    paddingVertical: wp('1.15%'),
     borderRadius: wp('4%'),
     backgroundColor: Colors.primary,
     alignItems: 'center',

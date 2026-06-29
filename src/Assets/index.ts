@@ -30,4 +30,5 @@ export const Images = {
   communityIcon: require('./images/community.png'),
   msgTextIcon: require('./images/msgtext.png'),
   profileBoostIcon: require('./images/profileBoast.png'),
+  filterIcon: require('./images/filter.png'),
 };

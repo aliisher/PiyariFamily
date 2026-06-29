@@ -17,7 +17,6 @@ import {
 } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
-import AuthStarDivider from '../../Components/AuthStarDivider';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
@@ -95,7 +94,7 @@ const PremiumSuccessScreen = () => {
     <View style={styles.root}>
       <LinearGradient
         colors={[Colors.gradientStart, Colors.gradientMid, Colors.gradientEnd]}
-        locations={[0, 0.4, 0]}
+        locations={[0, 0.42, 0]}
         style={styles.gradient}
       />
 
@@ -122,12 +121,18 @@ const PremiumSuccessScreen = () => {
 
           <Text style={styles.title}>{Strings.yourePremiumNow}</Text>
 
-          <AuthStarDivider
-            icon="heart"
-            width="52%"
-            heartImage={Images.heartIcon}
-            style={styles.heartDivider}
-          />
+          <View style={styles.starDivider}>
+            <View style={styles.dividerLine} />
+            <Icon
+              name="heart"
+              size={fs(10)}
+              color={Colors.primaryDark}
+              style={styles.starIcon}
+            />
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Text style={styles.tagline}>{Strings.tagline}</Text>
 
           <Text style={styles.subtitle}>{Strings.premiumWelcomeMessage}</Text>
 
@@ -246,8 +251,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.3,
   },
-  heartDivider: {
-    marginVertical: hp('1.2%'),
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: hp('1%'),
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('1.2%'),
   },
   subtitle: {
     fontSize: FontSizes.body,

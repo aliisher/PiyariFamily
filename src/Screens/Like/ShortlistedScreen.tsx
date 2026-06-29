@@ -31,6 +31,8 @@ type NavigationProp = NativeStackNavigationProp<
   'Shortlisted'
 >;
 
+const AVATAR_SIZE = wp('27%');
+
 const ShortlistedScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const [activeTab, setActiveTab] = useState<TabKey>('liked');
@@ -43,27 +45,42 @@ const ShortlistedScreen = () => {
       <Image source={item.image} style={styles.avatar} resizeMode="cover" />
 
       <View style={styles.cardBody}>
-        <View style={styles.cardTopRow}>
-          <Text style={styles.cardName}>
-            {item.name}, {item.age}
-          </Text>
-          <Icon name="heart" size={fs(20)} color={Colors.redish} />
+        <View style={styles.cardTop}>
+          <View style={styles.nameRow}>
+            <Text style={styles.cardName} numberOfLines={1}>
+              {item.name}, {item.age}
+            </Text>
+            <Icon name="heart" size={fs(20)} color={Colors.primary} />
+          </View>
+
+          <View style={styles.locationRow}>
+            <Icon name="map-marker" size={fs(12)} color={Colors.textLight} />
+            <Text style={styles.locationText} numberOfLines={1}>
+              {item.location}
+            </Text>
+          </View>
+
+          <View style={styles.tagColumn}>
+            <View style={styles.infoTag}>
+              <Icon
+                name="school-outline"
+                size={fs(11)}
+                color={Colors.primary}
+              />
+              <Text style={styles.infoTagText}>{item.education}</Text>
+            </View>
+            <View style={styles.infoTag}>
+              <Icon
+                name="briefcase-outline"
+                size={fs(11)}
+                color={Colors.primary}
+              />
+              <Text style={styles.infoTagText}>{item.profession}</Text>
+            </View>
+          </View>
         </View>
 
-        <View style={styles.locationRow}>
-          <Icon name="map-marker-outline" size={fs(13)} color={Colors.textLight} />
-          <Text style={styles.locationText}>{item.location}</Text>
-        </View>
-
-        <View style={styles.tagRow}>
-          <View style={styles.infoTag}>
-            <Icon name="school-outline" size={fs(11)} color={Colors.primary} />
-            <Text style={styles.infoTagText}>{item.education}</Text>
-          </View>
-          <View style={styles.infoTag}>
-            <Icon name="briefcase-outline" size={fs(11)} color={Colors.primary} />
-            <Text style={styles.infoTagText}>{item.profession}</Text>
-          </View>
+        <View style={styles.cardFooter}>
           {item.isVerified ? (
             <View style={styles.verifiedTag}>
               <Image
@@ -71,21 +88,27 @@ const ShortlistedScreen = () => {
                 style={styles.verifiedIcon}
                 resizeMode="contain"
               />
-              <Text style={styles.verifiedText}>{Strings.verifiedBadge}</Text>
+              <Text style={styles.verifiedText}>{Strings.verifiedLabel}</Text>
+              <Icon name="check" size={fs(10)} color={Colors.gold} />
             </View>
-          ) : null}
-        </View>
+          ) : (
+            <View />
+          )}
 
-        <TouchableOpacity
-          style={styles.viewProfileBtn}
-          activeOpacity={0.85}
-          onPress={() =>
-            navigation.navigate('ProfileDetail', { profileId: item.id === '4' || item.id === '5' ? '2' : '1' })
-          }
-        >
-          <Text style={styles.viewProfileText}>{Strings.viewProfile}</Text>
-          <Icon name="arrow-right" size={fs(16)} color={Colors.primary} />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.viewProfileBtn}
+            activeOpacity={0.85}
+            onPress={() =>
+              navigation.navigate('ProfileDetail', {
+                profileId:
+                  item.id === '4' || item.id === '5' ? '2' : '1',
+              })
+            }
+          >
+            <Text style={styles.viewProfileText}>{Strings.viewProfile}</Text>
+            <Icon name="arrow-right" size={fs(15)} color={Colors.gold} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -101,7 +124,11 @@ const ShortlistedScreen = () => {
             activeOpacity={0.85}
             onPress={() => navigation.navigate('FilterMatches')}
           >
-            <Icon name="tune-variant" size={fs(22)} color={Colors.primary} />
+            <Image
+              source={Images.filterIcon}
+              style={styles.filterIcon}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
         }
       />
@@ -138,6 +165,10 @@ const ShortlistedScreen = () => {
         </TouchableOpacity>
       </View>
 
+      <Text style={styles.profileCount}>
+        {Strings.showingProfiles.replace('{count}', String(profiles.length))}
+      </Text>
+
       <FlatList
         data={profiles}
         keyExtractor={item => item.id}
@@ -162,13 +193,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  filterIcon: {
+    width: fs(18),
+    height: fs(18),
+    tintColor: Colors.primary,
+  },
   tabRow: {
     flexDirection: 'row',
     marginHorizontal: AuthStyles.horizontalPadding,
     backgroundColor: Colors.tabActiveBg,
     borderRadius: wp('3.5%'),
     padding: wp('1%'),
-    marginBottom: hp('2%'),
+    marginBottom: hp('1.2%'),
   },
   tab: {
     flex: 1,
@@ -187,6 +223,13 @@ const styles = StyleSheet.create({
   tabTextActive: {
     color: Colors.white,
   },
+  profileCount: {
+    fontSize: FontSizes.bodySmall,
+    fontFamily: Fonts.regular,
+    color: Colors.textLight,
+    marginHorizontal: AuthStyles.horizontalPadding,
+    marginBottom: hp('1.5%'),
+  },
   listContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
     paddingBottom: hp('2%'),
@@ -194,98 +237,108 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     backgroundColor: Colors.white,
-    borderRadius: wp('4%'),
+    borderRadius: wp('4.5%'),
     borderWidth: 1,
-    borderColor: '#F0F0F0',
-    padding: wp('3%'),
-    marginBottom: hp('1.8%'),
+    borderColor: '#EEEEEE',
+    padding: wp('3.5%'),
+    marginBottom: hp('1.6%'),
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
-    shadowRadius: 6,
+    shadowRadius: 10,
     elevation: 2,
   },
   avatar: {
-    width: wp('22%'),
-    height: wp('28%'),
-    borderRadius: wp('3.5%'),
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: wp('3.8%'),
   },
   cardBody: {
     flex: 1,
     marginLeft: wp('3%'),
+    minHeight: AVATAR_SIZE,
+    justifyContent: 'space-between',
   },
-  cardTopRow: {
+  cardTop: {
+    flex: 1,
+  },
+  nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: hp('0.4%'),
+    marginBottom: hp('0.35%'),
+    gap: wp('2%'),
   },
   cardName: {
+    flex: 1,
     fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.primary,
-    flex: 1,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('1%'),
+    gap: wp('0.8%'),
     marginBottom: hp('0.8%'),
   },
   locationText: {
+    flex: 1,
     fontSize: fs(11),
     fontFamily: Fonts.regular,
     color: Colors.textLight,
   },
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: wp('1.5%'),
-    marginBottom: hp('0.8%'),
+  tagColumn: {
+    alignItems: 'flex-start',
+    gap: hp('0.45%'),
   },
   infoTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('1%'),
+    gap: wp('0.8%'),
     backgroundColor: Colors.tabActiveBg,
-    paddingHorizontal: wp('2.2%'),
-    paddingVertical: hp('0.35%'),
-    borderRadius: wp('2.5%'),
+    paddingHorizontal: wp('2.5%'),
+    paddingVertical: hp('0.4%'),
+    borderRadius: wp('4%'),
   },
   infoTagText: {
     fontSize: fs(10),
     fontFamily: Fonts.medium,
     color: Colors.primary,
   },
+  cardFooter: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    marginTop: hp('0.9%'),
+  },
   verifiedTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('0.8%'),
-    backgroundColor: '#FFF8E1',
-    paddingHorizontal: wp('2%'),
-    paddingVertical: hp('0.35%'),
-    borderRadius: wp('2.5%'),
+    gap: wp('1%'),
+    backgroundColor: '#FFF9E6',
+    paddingHorizontal: wp('2.5%'),
+    paddingVertical: hp('0.45%'),
+    borderRadius: wp('4%'),
   },
   verifiedIcon: {
-    width: fs(10),
-    height: fs(10),
+    width: fs(11),
+    height: fs(11),
     tintColor: Colors.gold,
   },
   verifiedText: {
-    fontSize: fs(9),
+    fontSize: fs(10),
     fontFamily: Fonts.semiBold,
     color: Colors.gold,
   },
   viewProfileBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-end',
-    gap: wp('1%'),
+    gap: wp('0.6%'),
   },
   viewProfileText: {
     fontSize: fs(12),
     fontFamily: Fonts.semiBold,
-    color: Colors.primary,
+    color: Colors.gold,
   },
 });
 

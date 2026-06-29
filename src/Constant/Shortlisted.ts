@@ -16,10 +16,10 @@ export const PROFILES_I_LIKED: ShortlistedProfile[] = [
   {
     id: '1',
     name: 'Fatima Khan',
-    age: 23,
+    age: 26,
     location: 'Lahore, Pakistan',
-    education: 'MBA',
-    profession: 'Software Engineer',
+    education: 'B.Tech',
+    profession: 'Teacher',
     image: Images.femaleProfile2,
     isVerified: true,
   },

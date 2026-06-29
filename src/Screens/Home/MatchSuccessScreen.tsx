@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
+import { FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
@@ -100,11 +101,18 @@ const MatchSuccessScreen = () => {
           />
         </View>
 
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <Icon name="heart" size={fs(14)} color={Colors.primary} />
-          <View style={styles.dividerLine} />
+        <View style={styles.starDivider}>
+          <View style={styles.starDividerLine} />
+          <Icon
+            name="heart"
+            size={fs(10)}
+            color={Colors.primaryDark}
+            style={styles.starIcon}
+          />
+          <View style={styles.starDividerLine} />
         </View>
+
+        <Text style={styles.tagline}>{Strings.tagline}</Text>
 
         <TouchableOpacity style={styles.messageBtn} activeOpacity={0.88}>
           <Icon
@@ -240,17 +248,29 @@ const styles = StyleSheet.create({
     right: wp('18%'),
     top: 0,
   },
-  dividerRow: {
+  starDivider: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('3%'),
-    width: '100%',
-    marginBottom: hp('2.5%'),
+    marginTop: hp('1%'),
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
   },
-  dividerLine: {
+  starDividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.divider,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('2.5%'),
   },
   messageBtn: {
     width: '100%',
