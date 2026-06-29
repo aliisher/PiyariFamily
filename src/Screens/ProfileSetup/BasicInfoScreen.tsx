@@ -161,7 +161,7 @@ const BasicInfoScreen = ({ navigation }: Props) => {
           />
 
           <Text style={styles.fieldLabel}>{Strings.genderLabel}</Text>
-          <View style={styles.genderRow}>
+          <View style={styles.genderContainer}>
             <TouchableOpacity
               style={[
                 styles.genderBtn,
@@ -353,17 +353,22 @@ const styles = StyleSheet.create({
     marginBottom: hp('1%'),
     fontFamily: Fonts.medium,
   },
-  genderRow: {
+  genderContainer: {
     flexDirection: 'row',
-    gap: wp('3%'),
+    borderWidth: 1,
+    borderColor: '#FDECEC',
+    borderRadius: AuthStyles.inputRadius,
+    backgroundColor: Colors.white,
+    padding: wp('1%'),
+    gap: wp('1.5%'),
     marginBottom: hp('2.2%'),
   },
   genderBtn: {
     flex: 1,
-    height: AuthStyles.inputHeight,
-    borderRadius: AuthStyles.inputRadius,
-    borderWidth: 1.2,
-    borderColor: Colors.focusBorder,
+    height: hp('5.2%'),
+    borderRadius: wp('2.4%'),
+    borderWidth: 1,
+    borderColor: '#FDECEC',
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
@@ -374,11 +379,12 @@ const styles = StyleSheet.create({
   },
   genderText: {
     fontSize: FontSizes.body,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.medium,
     color: Colors.primary,
   },
   genderTextActive: {
     color: Colors.white,
+    fontFamily: Fonts.bold,
   },
   dobRow: {
     flexDirection: 'row',

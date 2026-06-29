@@ -6,6 +6,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import AuthBackground from '../../Components/AuthBackground';
@@ -19,14 +21,13 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { AuthStackParamList } from '../../Navigation/AuthNavigator';
 import { fs, hp, wp } from '../../Functions/responsive';
 
-type Props = {
-  navigation: {
-    goBack: () => void;
-    navigate: (screen: string) => void;
-  };
-};
+type NavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'SetNewPassword'
+>;
 
 const isPasswordValid = (password: string) =>
   password.length >= 8 &&
@@ -34,9 +35,10 @@ const isPasswordValid = (password: string) =>
   /[0-9]/.test(password) &&
   /[^A-Za-z0-9]/.test(password);
 
-const SetNewPasswordScreen = ({ navigation }: Props) => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+const SetNewPasswordScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const [password, setPassword] = useState('12345678@Aa');
+  const [confirmPassword, setConfirmPassword] = useState('12345678@Aa');
   const [loading, setLoading] = useState(false);
 
   const handleReset = () => {
@@ -55,7 +57,7 @@ const SetNewPasswordScreen = ({ navigation }: Props) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate('PasswordResetSuccess');
+      navigation.replace('PasswordResetSuccess');
     }, 1000);
   };
 

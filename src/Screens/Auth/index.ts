@@ -8,3 +8,4 @@ export { default as CheckEmailScreen } from './CheckEmailScreen';
 export { default as CodeVerifiedScreen } from './CodeVerifiedScreen';
 export { default as SetNewPasswordScreen } from './SetNewPasswordScreen';
 export { default as PasswordResetSuccessScreen } from './PasswordResetSuccessScreen';
+export { default as WelcomeBackScreen } from './WelcomeBackScreen';

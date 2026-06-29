@@ -1,15 +1,15 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthSoftGlow from '../../Components/AuthSoftGlow';
-import AuthStarDivider from '../../Components/AuthStarDivider';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { Images } from '../../Assets';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
-import { hp, wp } from '../../Functions/responsive';
+import { fs, hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
@@ -29,10 +29,21 @@ const CodeVerifiedScreen = ({ navigation }: Props) => {
             resizeMode="contain"
           />
 
+          <View style={styles.starDivider}>
+            <View style={styles.dividerLine} />
+            <Icon
+              name="heart"
+              size={fs(10)}
+              color={Colors.primaryDark}
+              style={styles.starIcon}
+            />
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Text style={styles.tagline}>{Strings.tagline}</Text>
+
           <Text style={styles.title}>{Strings.codeVerifiedTitle}</Text>
           <Text style={styles.subtitle}>{Strings.codeVerifiedSubtitle}</Text>
-
-          <AuthStarDivider width="48%" starImage={Images.starIcon} />
         </View>
 
         <View style={styles.bottomSection}>
@@ -63,6 +74,29 @@ const styles = StyleSheet.create({
   illustration: {
     width: AuthStyles.illustrationSize,
     height: AuthStyles.illustrationSize,
+    marginBottom: hp('1%'),
+  },
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
     marginBottom: hp('2.5%'),
   },
   title: {

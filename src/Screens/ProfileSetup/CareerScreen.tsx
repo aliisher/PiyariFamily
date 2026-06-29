@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.medium,
   },
   segmentContainer: {
-    backgroundColor: Colors.tabActiveBg,
+    backgroundColor: Colors.white,
     borderRadius: AuthStyles.inputRadius,
     borderWidth: 1,
     borderColor: Colors.focusBorder,
@@ -247,6 +247,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('1%'),
     borderRadius: wp('2.5%'),
     backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.focusBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },

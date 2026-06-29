@@ -17,6 +17,7 @@ type Props = {
   label?: string;
   iconName?: string;
   iconSource?: ImageSourcePropType;
+  iconText?: string;
   placeholder: string;
   value: string;
   options: readonly string[];
@@ -30,6 +31,7 @@ const SetupDropdown = ({
   label,
   iconName,
   iconSource,
+  iconText,
   placeholder,
   value,
   options,
@@ -52,6 +54,8 @@ const SetupDropdown = ({
             style={[styles.dropdownIcon, styles.iconImage]}
             resizeMode="contain"
           />
+        ) : iconText ? (
+          <Text style={[styles.dropdownIcon, styles.iconText]}>{iconText}</Text>
         ) : (
           <Icon
             name={iconName!}
@@ -130,6 +134,13 @@ const styles = StyleSheet.create({
   iconImage: {
     width: fs(15),
     height: fs(15),
+  },
+  iconText: {
+    fontSize: fs(22),
+    fontFamily: Fonts.bold,
+    color: Colors.primary,
+    lineHeight: fs(22),
+    transform: [{ rotate: '12deg' }],
   },
   dropdownText: {
     flex: 1,

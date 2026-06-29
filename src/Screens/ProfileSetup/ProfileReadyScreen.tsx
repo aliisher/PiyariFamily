@@ -4,13 +4,14 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Images } from '../../Assets';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
-import { hp, wp } from '../../Functions/responsive';
+import { fs, hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
@@ -30,6 +31,19 @@ const ProfileReadyScreen = ({ navigation }: Props) => {
             style={styles.illustration}
             resizeMode="contain"
           />
+
+          <View style={styles.starDivider}>
+            <View style={styles.dividerLine} />
+            <Icon
+              name="heart"
+              size={fs(10)}
+              color={Colors.primaryDark}
+              style={styles.starIcon}
+            />
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Text style={styles.tagline}>{Strings.tagline}</Text>
 
           <Text style={styles.title}>
             {Strings.profileReadyTitle}{' '}
@@ -75,7 +89,30 @@ const styles = StyleSheet.create({
   illustration: {
     width: wp('55%'),
     height: wp('55%'),
-    marginBottom: hp('3%'),
+    marginBottom: hp('1%'),
+  },
+  starDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('0.7%'),
+    width: wp('42%'),
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.primaryDark,
+    opacity: 0.75,
+  },
+  starIcon: {
+    marginHorizontal: wp('2%'),
+  },
+  tagline: {
+    fontSize: FontSizes.bodySmall,
+    color: Colors.primaryDark,
+    fontFamily: Fonts.medium,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: hp('2.5%'),
   },
   title: {
     fontSize: FontSizes.h2,

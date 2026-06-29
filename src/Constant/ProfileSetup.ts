@@ -44,8 +44,8 @@ export const INCOME_RANGE_OPTIONS = [
   'Dependent on Family',
   'Less than 50K',
   '50K to 100K',
-  '100K to 150K',
-  '150K to 200K',
+  '100K to 200K',
+  '200K to 300K',
 ] as const;
 
 export type IncomeRange = (typeof INCOME_RANGE_OPTIONS)[number];

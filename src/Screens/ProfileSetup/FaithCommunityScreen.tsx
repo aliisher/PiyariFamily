@@ -199,7 +199,9 @@ const FaithCommunityScreen = ({ navigation }: Props) => {
                 : Strings.selectLanguagesPlaceholder}
             </Text>
             <Icon
-              name={openDropdown === 'languages' ? 'chevron-up' : 'chevron-down'}
+              name={
+                openDropdown === 'languages' ? 'chevron-up' : 'chevron-down'
+              }
               size={fs(22)}
               color={Colors.iconMuted}
             />
@@ -259,14 +261,16 @@ const FaithCommunityScreen = ({ navigation }: Props) => {
               color={Colors.primary}
               style={styles.noticeIcon}
             />
-            <Text style={styles.noticeText}>{Strings.faithCommunityNotice}</Text>
+            <Text style={styles.noticeText}>
+              {Strings.faithCommunityNotice}
+            </Text>
           </View>
         </ScrollView>
 
         <View
           style={[
             styles.footer,
-            { paddingBottom: Math.max(insets.bottom, hp('2%')) },
+            { paddingBottom: Math.max(insets.bottom, hp('5%')) },
           ]}
         >
           <PrimaryButton

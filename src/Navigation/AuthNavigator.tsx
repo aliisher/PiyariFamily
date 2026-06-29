@@ -12,6 +12,7 @@ import {
   CodeVerifiedScreen,
   SetNewPasswordScreen,
   PasswordResetSuccessScreen,
+  WelcomeBackScreen,
 } from '../Screens/Auth';
 import {
   AddPhotosScreen,
@@ -36,6 +37,7 @@ export type AuthStackParamList = {
   CodeVerified: undefined;
   SetNewPassword: undefined;
   PasswordResetSuccess: undefined;
+  WelcomeBack: undefined;
   SelectCountry: undefined;
   BasicInfo: undefined;
   Education: undefined;
@@ -72,6 +74,7 @@ const AuthNavigator = () => {
           name="PasswordResetSuccess"
           component={PasswordResetSuccessScreen}
         />
+        <Stack.Screen name="WelcomeBack" component={WelcomeBackScreen} />
         <Stack.Screen name="SelectCountry" component={SelectCountryScreen} />
         <Stack.Screen name="BasicInfo" component={BasicInfoScreen} />
         <Stack.Screen name="Education" component={EducationScreen} />
