@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Images } from '../Assets';
 import { AuthStyles, FontSizes } from '../Constant/AuthStyles';
 import { ProfileDetail } from '../Constant/MatchProfiles';
 import { Colors } from '../Constant/Colors';
@@ -32,6 +35,8 @@ const ProfilePreviewSheet = ({
   onClose,
   onViewFullProfile,
 }: Props) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
   const quickChips = profile.quickInfo.slice(0, 3);
   const previewInterests = profile.interests.slice(0, 3);
   const height =
@@ -48,6 +53,10 @@ const ProfilePreviewSheet = ({
     { icon: 'earth', label: 'Mother Tongue', value: motherTongue },
   ];
 
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
+
   return (
     <Modal
       isVisible={visible}
@@ -55,6 +64,9 @@ const ProfilePreviewSheet = ({
       onSwipeComplete={onClose}
       swipeDirection={['down']}
       propagateSwipe
+      scrollTo={offset => scrollViewRef.current?.scrollTo(offset)}
+      scrollOffset={scrollOffset}
+      scrollOffsetMax={hp('45%')}
       style={styles.modal}
       backdropOpacity={0.45}
       useNativeDriver
@@ -75,8 +87,14 @@ const ProfilePreviewSheet = ({
         </View>
 
         <ScrollView
+          ref={scrollViewRef}
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           bounces={false}
+          nestedScrollEnabled
+          keyboardShouldPersistTaps="handled"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           contentContainerStyle={styles.scrollContent}
         >
           <View style={styles.profileSection}>
@@ -88,9 +106,28 @@ const ProfilePreviewSheet = ({
               />
             </View>
 
-            <View style={styles.verifiedBadge}>
-              <Icon name="shield-check" size={fs(12)} color={Colors.gold} />
-              <Text style={styles.verifiedText}>{Strings.verifiedBadge}</Text>
+            <View style={styles.badgeColumn}>
+              {profile.isVerified ? (
+                <View style={styles.verifiedBadge}>
+                  <Image
+                    source={Images.verifiedIcon}
+                    style={styles.verifiedIcon}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.verifiedText}>
+                    {Strings.verifiedBadge}
+                  </Text>
+                </View>
+              ) : null}
+
+              <View style={styles.tierBadge}>
+                <Icon
+                  name={profile.tier === 'VIP' ? 'star' : 'crown'}
+                  size={fs(10)}
+                  color={Colors.white}
+                />
+                <Text style={styles.tierText}>{profile.tier}</Text>
+              </View>
             </View>
 
             <Text style={styles.name}>{profile.fullName}</Text>
@@ -184,7 +221,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: wp('7%'),
     borderTopRightRadius: wp('7%'),
     maxHeight: hp('88%'),
-    paddingBottom: hp('2%'),
   },
   handle: {
     alignSelf: 'center',
@@ -216,9 +252,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scrollView: {
+    flexGrow: 0,
+    flexShrink: 1,
+  },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
-    paddingBottom: hp('0.5%'),
+    paddingBottom: hp('1%'),
   },
   profileSection: {
     alignItems: 'center',
@@ -238,23 +278,46 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: wp('14.5%'),
   },
+  badgeColumn: {
+    alignItems: 'center',
+    gap: hp('0.4%'),
+    marginTop: -hp('1.2%'),
+    marginBottom: hp('0.8%'),
+  },
+  tierBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('0.8%'),
+    backgroundColor: Colors.gold,
+    paddingHorizontal: wp('2.2%'),
+    paddingVertical: hp('0.3%'),
+    borderRadius: wp('2.5%'),
+  },
+  tierText: {
+    fontSize: fs(9),
+    fontFamily: Fonts.semiBold,
+    color: Colors.white,
+  },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('1%'),
-    backgroundColor: '#FFF3D6',
-    borderRadius: wp('3%'),
-    paddingHorizontal: wp('2.8%'),
+    backgroundColor: Colors.white,
+    paddingHorizontal: wp('2%'),
     paddingVertical: hp('0.35%'),
-    marginTop: -hp('1.2%'),
-    marginBottom: hp('0.8%'),
+    borderRadius: wp('5.5%'),
     borderWidth: 1,
-    borderColor: '#F0D78C',
+    borderColor: '#F0F0F0',
+  },
+  verifiedIcon: {
+    width: fs(11),
+    height: fs(11),
+    tintColor: Colors.gold,
   },
   verifiedText: {
-    fontSize: fs(10),
-    fontFamily: Fonts.semiBold,
-    color: Colors.gold,
+    fontSize: fs(9),
+    fontFamily: Fonts.medium,
+    color: Colors.black,
   },
   name: {
     fontSize: fs(20),
@@ -369,6 +432,7 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: AuthStyles.horizontalPadding,
     paddingTop: hp('1%'),
+    paddingBottom: hp('2%'),
     gap: hp('0.9%'),
     borderTopWidth: 1,
     borderTopColor: '#F3E8EB',

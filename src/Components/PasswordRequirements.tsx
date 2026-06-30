@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FontSizes } from '../Constant/AuthStyles';
 import { Colors } from '../Constant/Colors';
@@ -8,6 +8,7 @@ import { fs, hp, wp } from '../Functions/responsive';
 
 type Props = {
   password: string;
+  style?: ViewStyle;
 };
 
 const requirements = [
@@ -23,9 +24,9 @@ const requirements = [
   },
 ];
 
-const PasswordRequirements = ({ password }: Props) => {
+const PasswordRequirements = ({ password, style }: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {requirements.map(item => {
         const met = item.test(password);
         return (

@@ -28,6 +28,8 @@ import {
   Community,
   EDIT_MARITAL_STATUS_OPTIONS,
   EditMaritalStatus,
+  HEIGHT_FEET_OPTIONS,
+  HEIGHT_INCHES_OPTIONS,
   MAX_OTHER_LANGUAGES,
   MOTHER_TONGUE_OPTIONS,
   MotherTongue,
@@ -49,7 +51,6 @@ type NavigationProp = NativeStackNavigationProp<
 >;
 
 type Gender = 'male' | 'female';
-type HeightUnit = 'ft' | 'in';
 
 const ABOUT_MAX_LENGTH = 300;
 const DEFAULT_ABOUT =
@@ -66,8 +67,8 @@ const EditProfileScreen = () => {
   const [email] = useState('Ayesh@gmail.com');
   const [phone, setPhone] = useState('+92 34865 43210');
   const [city, setCity] = useState('Lahore, Pakistan');
-  const [height, setHeight] = useState('5 ft 4 inches');
-  const [heightUnit, setHeightUnit] = useState<HeightUnit>('ft');
+  const [heightFeet, setHeightFeet] = useState('5');
+  const [heightInches, setHeightInches] = useState('4');
   const [motherTongue, setMotherTongue] = useState<MotherTongue>('Urdu');
   const [otherLanguages, setOtherLanguages] = useState<OtherLanguage[]>([
     'Urdu',
@@ -79,8 +80,16 @@ const EditProfileScreen = () => {
   const [residenceStatus, setResidenceStatus] =
     useState<ResidenceStatus>('Owned');
   const [openDropdown, setOpenDropdown] = useState<
-    'motherTongue' | 'languages' | 'marital' | 'community' | 'residence' | null
+    | 'feet'
+    | 'inches'
+    | 'motherTongue'
+    | 'languages'
+    | 'marital'
+    | 'community'
+    | 'residence'
+    | null
   >(null);
+  const [saving, setSaving] = useState(false);
 
   const toggleLanguage = (language: OtherLanguage) => {
     setOtherLanguages(prev => {
@@ -100,8 +109,18 @@ const EditProfileScreen = () => {
   };
 
   const handleSave = () => {
-    Toast.show('Profile saved successfully');
-    navigation.goBack();
+    if (saving) {
+      return;
+    }
+
+    setSaving(true);
+    setTimeout(() => {
+      setSaving(false);
+      Toast.show(Strings.profileSaved, Toast.LONG);
+      setTimeout(() => {
+        navigation.goBack();
+      }, 600);
+    }, 800);
   };
 
   const renderSectionHeader = (icon: string, title: string) => (
@@ -121,8 +140,14 @@ const EditProfileScreen = () => {
         title={Strings.editProfileTitle}
         onBack={() => navigation.goBack()}
         rightElement={
-          <TouchableOpacity activeOpacity={0.85} onPress={handleSave}>
-            <Text style={styles.saveText}>{Strings.save}</Text>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={handleSave}
+            disabled={saving}
+          >
+            <Text style={[styles.saveText, saving && styles.saveTextDisabled]}>
+              {Strings.save}
+            </Text>
           </TouchableOpacity>
         }
       />
@@ -238,9 +263,7 @@ const EditProfileScreen = () => {
             <TextInput
               style={styles.aboutInput}
               value={aboutMe}
-              onChangeText={text =>
-                setAboutMe(text.slice(0, ABOUT_MAX_LENGTH))
-              }
+              onChangeText={text => setAboutMe(text.slice(0, ABOUT_MAX_LENGTH))}
               placeholder={Strings.aboutMePlaceholder}
               placeholderTextColor={Colors.placeholder}
               multiline
@@ -297,53 +320,38 @@ const EditProfileScreen = () => {
           {renderSectionHeader('heart-outline', Strings.lifestyleSection)}
 
           {renderFieldLabel(Strings.heightLabel)}
-          <View style={styles.inputRow}>
-            <Icon
-              name="ruler"
-              size={fs(20)}
-              color={Colors.primary}
-              style={styles.inputIcon}
+          <View style={styles.heightRow}>
+            <SetupDropdown
+              iconText="'"
+              placeholder={Strings.selectFeetPlaceholder}
+              value={heightFeet ? `${heightFeet} ft` : ''}
+              options={HEIGHT_FEET_OPTIONS.map(option => `${option} ft`)}
+              isOpen={openDropdown === 'feet'}
+              onToggle={() =>
+                setOpenDropdown(prev => (prev === 'feet' ? null : 'feet'))
+              }
+              onSelect={value => {
+                setHeightFeet(value.replace(' ft', ''));
+                setOpenDropdown(null);
+              }}
+              style={styles.heightDropdown}
             />
-            <TextInput
-              style={styles.input}
-              value={height}
-              onChangeText={setHeight}
-              placeholderTextColor={Colors.placeholder}
+            <SetupDropdown
+              iconSource={Images.inchesIcon}
+              iconImageSize={fs(11)}
+              placeholder={Strings.selectInchesPlaceholder}
+              value={heightInches ? `${heightInches} in` : ''}
+              options={HEIGHT_INCHES_OPTIONS.map(option => `${option} in`)}
+              isOpen={openDropdown === 'inches'}
+              onToggle={() =>
+                setOpenDropdown(prev => (prev === 'inches' ? null : 'inches'))
+              }
+              onSelect={value => {
+                setHeightInches(value.replace(' in', ''));
+                setOpenDropdown(null);
+              }}
+              style={styles.heightDropdown}
             />
-            <View style={styles.unitToggle}>
-              <TouchableOpacity
-                style={[
-                  styles.unitBtn,
-                  heightUnit === 'ft' && styles.unitBtnActive,
-                ]}
-                onPress={() => setHeightUnit('ft')}
-              >
-                <Text
-                  style={[
-                    styles.unitText,
-                    heightUnit === 'ft' && styles.unitTextActive,
-                  ]}
-                >
-                  {Strings.heightUnitFt}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.unitBtn,
-                  heightUnit === 'in' && styles.unitBtnActive,
-                ]}
-                onPress={() => setHeightUnit('in')}
-              >
-                <Text
-                  style={[
-                    styles.unitText,
-                    heightUnit === 'in' && styles.unitTextActive,
-                  ]}
-                >
-                  {Strings.heightUnitIn}
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
 
           <SetupDropdown
@@ -384,7 +392,9 @@ const EditProfileScreen = () => {
               {Strings.selectLanguage}
             </Text>
             <Icon
-              name={openDropdown === 'languages' ? 'chevron-up' : 'chevron-down'}
+              name={
+                openDropdown === 'languages' ? 'chevron-up' : 'chevron-down'
+              }
               size={fs(22)}
               color={Colors.iconMuted}
             />
@@ -510,6 +520,7 @@ const EditProfileScreen = () => {
           <PrimaryButton
             title={Strings.saveChanges}
             onPress={handleSave}
+            loading={saving}
             showArrow
           />
         </View>
@@ -532,6 +543,9 @@ const styles = StyleSheet.create({
     color: Colors.gold,
     minWidth: wp('12%'),
     textAlign: 'right',
+  },
+  saveTextDisabled: {
+    opacity: 0.45,
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
@@ -636,25 +650,26 @@ const styles = StyleSheet.create({
   },
   genderRow: {
     flexDirection: 'row',
-    gap: wp('3%'),
-    marginBottom: hp('2%'),
+    gap: wp('2%'),
+    marginBottom: hp('1.2%'),
   },
   genderBtn: {
     flex: 1,
-    height: AuthStyles.inputHeight,
+    height: hp('5%'),
     borderRadius: AuthStyles.inputRadius,
     borderWidth: 1.2,
     borderColor: Colors.focusBorder,
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: wp('1%'),
   },
   genderBtnActive: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
   genderText: {
-    fontSize: FontSizes.body,
+    fontSize: fs(13),
     fontFamily: Fonts.semiBold,
     color: Colors.primary,
   },
@@ -696,28 +711,13 @@ const styles = StyleSheet.create({
     minHeight: hp('10%'),
     paddingVertical: 0,
   },
-  unitToggle: {
+  heightRow: {
     flexDirection: 'row',
-    backgroundColor: Colors.tabActiveBg,
-    borderRadius: wp('2.5%'),
-    padding: wp('0.5%'),
-    marginLeft: wp('2%'),
+    gap: wp('2.5%'),
+    marginBottom: hp('2%'),
   },
-  unitBtn: {
-    paddingHorizontal: wp('2.5%'),
-    paddingVertical: hp('0.4%'),
-    borderRadius: wp('2%'),
-  },
-  unitBtnActive: {
-    backgroundColor: Colors.primary,
-  },
-  unitText: {
-    fontSize: fs(11),
-    fontFamily: Fonts.semiBold,
-    color: Colors.primary,
-  },
-  unitTextActive: {
-    color: Colors.white,
+  heightDropdown: {
+    flex: 1,
   },
   dropdownRow: {
     flexDirection: 'row',

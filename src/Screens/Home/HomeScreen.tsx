@@ -176,9 +176,13 @@ const HomeScreen = () => {
           <View />
         )}
         {item.isVerified ? (
-          <View style={styles.verifiedBadge}>
-            <Icon name="shield-check" size={fs(13)} color={Colors.redish} />
-            <Text style={styles.verifiedBadgeText}>
+          <View style={styles.suggestedVerifiedRow}>
+            <Image
+              source={Images.verifiedIcon}
+              style={styles.suggestedVerifiedIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.suggestedVerifiedText}>
               {Strings.verifiedBadge}
             </Text>
           </View>
@@ -345,27 +349,29 @@ const HomeScreen = () => {
                   resizeMode="cover"
                 />
 
-                <View style={styles.suggestedTierBadge}>
-                  <Icon
-                    name={match.tier === 'VIP' ? 'star' : 'crown'}
-                    size={fs(10)}
-                    color={Colors.white}
-                  />
-                  <Text style={styles.suggestedTierText}>{match.tier}</Text>
-                </View>
-
-                {match.isVerified ? (
-                  <View style={styles.suggestedVerifiedRow}>
-                    <Image
-                      source={Images.verifiedIcon}
-                      style={styles.suggestedVerifiedIcon}
-                      resizeMode="contain"
+                <View style={styles.suggestedBadgeColumn}>
+                  <View style={styles.suggestedTierBadge}>
+                    <Icon
+                      name={match.tier === 'VIP' ? 'star' : 'crown'}
+                      size={fs(10)}
+                      color={Colors.white}
                     />
-                    <Text style={styles.suggestedVerifiedText}>
-                      {Strings.verifiedBadge}
-                    </Text>
+                    <Text style={styles.suggestedTierText}>{match.tier}</Text>
                   </View>
-                ) : null}
+
+                  {match.isVerified ? (
+                    <View style={styles.suggestedVerifiedRow}>
+                      <Image
+                        source={Images.verifiedIcon}
+                        style={styles.suggestedVerifiedIcon}
+                        resizeMode="contain"
+                      />
+                      <Text style={styles.suggestedVerifiedText}>
+                        {Strings.verifiedBadge}
+                      </Text>
+                    </View>
+                  ) : null}
+                </View>
               </View>
 
               <View style={styles.suggestedBody}>
@@ -555,20 +561,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     color: Colors.white,
   },
-  verifiedBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp('1%'),
-    backgroundColor: Colors.white,
-    paddingHorizontal: wp('2.5%'),
-    paddingVertical: hp('0.45%'),
-    borderRadius: wp('3%'),
-  },
-  verifiedBadgeText: {
-    fontSize: fs(11),
-    fontFamily: Fonts.semiBold,
-    color: Colors.redish,
-  },
   featuredInfo: {
     position: 'absolute',
     left: wp('4.5%'),
@@ -708,9 +700,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   suggestedTierBadge: {
-    position: 'absolute',
-    top: hp('0.8%'),
-    right: wp('2%'),
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('0.8%'),
@@ -735,10 +724,14 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     marginBottom: hp('0.2%'),
   },
-  suggestedVerifiedRow: {
+  suggestedBadgeColumn: {
     position: 'absolute',
     top: hp('0.8%'),
-    left: wp('2%'),
+    right: wp('2%'),
+    alignItems: 'flex-end',
+    gap: hp('0.35%'),
+  },
+  suggestedVerifiedRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('1%'),
@@ -753,7 +746,7 @@ const styles = StyleSheet.create({
     tintColor: Colors.gold,
   },
   suggestedVerifiedText: {
-    fontSize: fs(9),
+    fontSize: fs(10),
     fontFamily: Fonts.medium,
     color: Colors.black,
   },

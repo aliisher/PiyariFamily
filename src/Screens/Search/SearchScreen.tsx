@@ -45,7 +45,11 @@ const QUICK_FILTERS: {
   icon: string;
 }[] = [
   { id: 'nearMe', label: Strings.nearMe, icon: 'map-marker-outline' },
-  { id: 'verified', label: Strings.verifiedProfiles, icon: 'shield-check-outline' },
+  {
+    id: 'verified',
+    label: Strings.verifiedProfiles,
+    icon: 'shield-check-outline',
+  },
   { id: 'newProfiles', label: Strings.newProfiles, icon: 'creation' },
 ];
 
@@ -178,61 +182,72 @@ const SearchScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.matchGrid}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.suggestedList}
+        >
           {SUGGESTED_MATCHES.map(match => (
             <TouchableOpacity
               key={match.id}
-              style={styles.matchCard}
+              style={styles.suggestedCard}
               activeOpacity={0.9}
               onPress={() =>
                 navigation.navigate('ProfileDetail', { profileId: match.id })
               }
             >
-              <View style={styles.matchImageWrap}>
+              <View style={styles.suggestedImageWrap}>
                 <Image
                   source={match.image}
-                  style={styles.matchImage}
+                  style={styles.suggestedImage}
                   resizeMode="cover"
                 />
-                {match.isVerified ? (
-                  <View style={styles.verifyBadge}>
+
+                <View style={styles.suggestedBadgeColumn}>
+                  <View style={styles.suggestedTierBadge}>
                     <Icon
-                      name="shield-check"
-                      size={fs(11)}
+                      name={match.tier === 'VIP' ? 'star' : 'crown'}
+                      size={fs(10)}
                       color={Colors.white}
                     />
+                    <Text style={styles.suggestedTierText}>{match.tier}</Text>
                   </View>
-                ) : null}
-                <View style={styles.tierBadge}>
-                  <Icon
-                    name={match.tier === 'VIP' ? 'star' : 'crown'}
-                    size={fs(10)}
-                    color={Colors.white}
-                  />
-                  <Text style={styles.tierText}>{match.tier}</Text>
+
+                  {match.isVerified ? (
+                    <View style={styles.suggestedVerifiedRow}>
+                      <Image
+                        source={Images.verifiedIcon}
+                        style={styles.suggestedVerifiedIcon}
+                        resizeMode="contain"
+                      />
+                      <Text style={styles.suggestedVerifiedText}>
+                        {Strings.verifiedBadge}
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
               </View>
 
-              <View style={styles.matchBody}>
-                <Text style={styles.matchName}>
+              <View style={styles.suggestedBody}>
+                <Text style={styles.suggestedName}>
                   {match.name}, {match.age}
                 </Text>
-                <View style={styles.matchLocationRow}>
+                <View style={styles.suggestedLocationRow}>
                   <Icon
                     name="map-marker-outline"
                     size={fs(11)}
                     color={Colors.textLight}
                   />
-                  <Text style={styles.matchLocation}>{match.location}</Text>
+                  <Text style={styles.suggestedLocation}>{match.location}</Text>
                 </View>
-                <View style={styles.matchBottomRow}>
+                <View style={styles.suggestedBottomRow}>
                   <View style={styles.professionTag}>
                     <Text style={styles.professionText}>
                       {match.profession}
                     </Text>
                   </View>
                   <TouchableOpacity
-                    style={styles.likeBtn}
+                    style={styles.suggestedLikeBtn}
                     activeOpacity={0.85}
                   >
                     <Icon
@@ -245,7 +260,7 @@ const SearchScreen = () => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -373,50 +388,29 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
     color: Colors.gold,
   },
-  matchGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    rowGap: hp('1.5%'),
+  suggestedList: {
+    gap: wp('3%'),
+    paddingRight: wp('2%'),
   },
-  matchCard: {
-    width: '48%',
+  suggestedCard: {
+    width: wp('43%'),
     backgroundColor: Colors.white,
     borderRadius: wp('4.5%'),
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#F0F0F0',
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 3,
   },
-  matchImageWrap: {
+  suggestedImageWrap: {
     width: '100%',
     height: hp('15.5%'),
     position: 'relative',
     backgroundColor: Colors.gradientStart,
   },
-  matchImage: {
+  suggestedImage: {
     width: '100%',
     height: '100%',
   },
-  verifyBadge: {
-    position: 'absolute',
-    top: hp('0.8%'),
-    left: wp('2%'),
-    width: wp('6%'),
-    height: wp('6%'),
-    borderRadius: wp('3%'),
-    backgroundColor: '#22C55E',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tierBadge: {
-    position: 'absolute',
-    top: hp('0.8%'),
-    right: wp('2%'),
+  suggestedTierBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('0.8%'),
@@ -425,34 +419,60 @@ const styles = StyleSheet.create({
     paddingVertical: hp('0.3%'),
     borderRadius: wp('2.5%'),
   },
-  tierText: {
+  suggestedTierText: {
     fontSize: fs(9),
     fontFamily: Fonts.semiBold,
     color: Colors.white,
   },
-  matchBody: {
+  suggestedBody: {
     paddingHorizontal: wp('3%'),
     paddingTop: hp('1%'),
     paddingBottom: hp('1.1%'),
   },
-  matchName: {
+  suggestedName: {
     fontSize: fs(14),
     fontFamily: Fonts.bold,
     color: Colors.primary,
     marginBottom: hp('0.2%'),
   },
-  matchLocationRow: {
+  suggestedBadgeColumn: {
+    position: 'absolute',
+    top: hp('0.8%'),
+    right: wp('2%'),
+    alignItems: 'flex-end',
+    gap: hp('0.35%'),
+  },
+  suggestedVerifiedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('1%'),
+    backgroundColor: Colors.white,
+    paddingHorizontal: wp('2%'),
+    paddingVertical: hp('0.35%'),
+    borderRadius: wp('5.5%'),
+  },
+  suggestedVerifiedIcon: {
+    width: fs(11),
+    height: fs(11),
+    tintColor: Colors.gold,
+  },
+  suggestedVerifiedText: {
+    fontSize: fs(9),
+    fontFamily: Fonts.medium,
+    color: Colors.black,
+  },
+  suggestedLocationRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('0.5%'),
     marginBottom: hp('0.9%'),
   },
-  matchLocation: {
+  suggestedLocation: {
     fontSize: fs(11),
     fontFamily: Fonts.regular,
     color: Colors.textLight,
   },
-  matchBottomRow: {
+  suggestedBottomRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -469,7 +489,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.medium,
     color: Colors.primary,
   },
-  likeBtn: {
+  suggestedLikeBtn: {
     width: wp('8.5%'),
     height: wp('8.5%'),
     borderRadius: wp('4.25%'),

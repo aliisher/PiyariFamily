@@ -86,15 +86,30 @@ const ProfileDetailScreen = () => {
             <Text style={styles.heroName}>
               {profile.fullName}, {profile.age}
             </Text>
+
             <View style={styles.heroMetaRow}>
-              <View style={styles.verifiedRow}>
-                <Image
-                  source={Images.verifiedIcon}
-                  style={styles.verifiedIcon}
-                  resizeMode="contain"
+              <View style={styles.heroTierBadge}>
+                <Icon
+                  name={profile.tier === 'VIP' ? 'star' : 'crown'}
+                  size={fs(10)}
+                  color={Colors.white}
                 />
-                <Text style={styles.verifiedText}>{Strings.verifiedBadge}</Text>
+                <Text style={styles.heroTierText}>{profile.tier}</Text>
               </View>
+
+              {profile.isVerified ? (
+                <View style={styles.verifiedRow}>
+                  <Image
+                    source={Images.verifiedIcon}
+                    style={styles.verifiedIcon}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.verifiedText}>
+                    {Strings.verifiedBadge}
+                  </Text>
+                </View>
+              ) : null}
+
               <View style={styles.locationRow}>
                 <Icon name="map-marker" size={fs(13)} color={Colors.white} />
                 <Text style={styles.locationText}>{profile.location}</Text>
@@ -256,12 +271,27 @@ const styles = StyleSheet.create({
     fontSize: fs(24),
     fontFamily: Fonts.bold,
     color: Colors.white,
-    marginBottom: hp('0.8%'),
+    marginBottom: hp('0.6%'),
   },
   heroMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: wp('4%'),
+    flexWrap: 'wrap',
+    gap: wp('2.5%'),
+  },
+  heroTierBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp('0.8%'),
+    backgroundColor: Colors.gold,
+    paddingHorizontal: wp('2.2%'),
+    paddingVertical: hp('0.3%'),
+    borderRadius: wp('2.5%'),
+  },
+  heroTierText: {
+    fontSize: fs(9),
+    fontFamily: Fonts.semiBold,
+    color: Colors.white,
   },
   verifiedRow: {
     flexDirection: 'row',

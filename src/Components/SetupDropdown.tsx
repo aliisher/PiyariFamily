@@ -2,10 +2,12 @@ import React from 'react';
 import {
   Image,
   ImageSourcePropType,
+  ImageStyle,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthStyles, FontSizes } from '../Constant/AuthStyles';
@@ -17,6 +19,7 @@ type Props = {
   label?: string;
   iconName?: string;
   iconSource?: ImageSourcePropType;
+  iconImageSize?: number;
   iconText?: string;
   placeholder: string;
   value: string;
@@ -24,13 +27,14 @@ type Props = {
   isOpen: boolean;
   onToggle: () => void;
   onSelect: (value: string) => void;
-  style?: object;
+  style?: ViewStyle;
 };
 
 const SetupDropdown = ({
   label,
   iconName,
   iconSource,
+  iconImageSize = fs(15),
   iconText,
   placeholder,
   value,
@@ -51,7 +55,11 @@ const SetupDropdown = ({
         {iconSource ? (
           <Image
             source={iconSource}
-            style={[styles.dropdownIcon, styles.iconImage]}
+            style={[
+              styles.dropdownIcon,
+              styles.iconImage,
+              { width: iconImageSize, height: iconImageSize } as ImageStyle,
+            ]}
             resizeMode="contain"
           />
         ) : iconText ? (

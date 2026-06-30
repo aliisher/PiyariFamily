@@ -12,10 +12,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import ScreenHeader from '../../Components/ScreenHeader';
+import PasswordRequirements from '../../Components/PasswordRequirements';
 import PasswordStrengthMeter from '../../Components/PasswordStrengthMeter';
 import PrimaryButton from '../../Components/PrimaryButton';
 import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
@@ -23,6 +27,7 @@ import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
 import { ProfileStackParamList } from '../../Navigation/ProfileStackNavigator';
+import { getFooterBottomPadding } from '../../Functions/safeArea';
 import { fs, hp, wp } from '../../Functions/responsive';
 
 type NavigationProp = NativeStackNavigationProp<
@@ -30,15 +35,11 @@ type NavigationProp = NativeStackNavigationProp<
   'ChangePassword'
 >;
 
-const REQUIREMENTS = [
-  { label: 'At least 8+ characters', test: (p: string) => p.length >= 8 },
-  { label: 'At least One uppercase', test: (p: string) => /[A-Z]/.test(p) },
-  { label: 'At least One number', test: (p: string) => /[0-9]/.test(p) },
-  {
-    label: 'At least One special char',
-    test: (p: string) => /[^A-Za-z0-9]/.test(p),
-  },
-];
+const isPasswordValid = (password: string) =>
+  password.length >= 8 &&
+  /[A-Z]/.test(password) &&
+  /[0-9]/.test(password) &&
+  /[^A-Za-z0-9]/.test(password);
 
 type PasswordFieldProps = {
   label: string;
@@ -89,6 +90,7 @@ const PasswordField = ({
 
 const ChangePasswordScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+  const insets = useSafeAreaInsets();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -105,8 +107,7 @@ const ChangePasswordScreen = () => {
       return;
     }
 
-    const allMet = REQUIREMENTS.every(item => item.test(newPassword));
-    if (!allMet) {
+    if (!isPasswordValid(newPassword)) {
       Toast.show('Please meet all password requirements');
       return;
     }
@@ -135,10 +136,15 @@ const ChangePasswordScreen = () => {
           />
 
           <KeyboardAwareScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
+            style={styles.flex}
+            contentContainerStyle={[
+              styles.scrollContent,
+              { paddingBottom: getFooterBottomPadding(insets.bottom) },
+            ]}
             keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
             enableOnAndroid
+            extraScrollHeight={hp('2%')}
             bounces={false}
           >
             <View style={styles.iconBadge}>
@@ -151,7 +157,9 @@ const ChangePasswordScreen = () => {
             </View>
 
             <Text style={styles.title}>{Strings.updateYourPassword}</Text>
-            <Text style={styles.subtitle}>{Strings.changePasswordSubtitle}</Text>
+            <Text style={styles.subtitle}>
+              {Strings.changePasswordSubtitle}
+            </Text>
 
             <PasswordField
               label={Strings.currentPasswordLabel}
@@ -170,29 +178,7 @@ const ChangePasswordScreen = () => {
             />
 
             <PasswordStrengthMeter password={newPassword} />
-
-            <View style={styles.requirementsGrid}>
-              {REQUIREMENTS.map(item => {
-                const met = item.test(newPassword);
-                return (
-                  <View key={item.label} style={styles.requirementItem}>
-                    <Icon
-                      name={met ? 'check-circle' : 'circle-outline'}
-                      size={fs(14)}
-                      color={met ? '#4CAF50' : Colors.border}
-                    />
-                    <Text
-                      style={[
-                        styles.requirementText,
-                        met && styles.requirementTextMet,
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
+            <PasswordRequirements password={newPassword} />
 
             <PasswordField
               label={Strings.confirmNewPasswordLabel}
@@ -225,7 +211,9 @@ const ChangePasswordScreen = () => {
               activeOpacity={0.85}
               onPress={() => Toast.show('Password reset link sent')}
             >
-              <Text style={styles.forgotText}>{Strings.forgotYourPassword}</Text>
+              <Text style={styles.forgotText}>
+                {Strings.forgotYourPassword}
+              </Text>
             </TouchableOpacity>
           </KeyboardAwareScrollView>
         </View>
@@ -255,7 +243,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: AuthStyles.horizontalPadding,
-    paddingBottom: hp('3%'),
+    paddingTop: hp('0.5%'),
   },
   iconBadge: {
     alignSelf: 'center',
@@ -312,29 +300,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     color: Colors.label,
     paddingVertical: 0,
-  },
-  requirementsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: hp('1.5%'),
-    marginTop: hp('0.2%'),
-  },
-  requirementItem: {
-    width: '48%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp('1.5%'),
-    marginBottom: hp('0.8%'),
-  },
-  requirementText: {
-    flex: 1,
-    fontSize: fs(10),
-    fontFamily: Fonts.regular,
-    color: Colors.textLight,
-  },
-  requirementTextMet: {
-    color: Colors.textSecondary,
   },
   securityNote: {
     flexDirection: 'row',

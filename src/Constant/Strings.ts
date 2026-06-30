@@ -173,8 +173,7 @@ export const Strings = {
 
   faithCommunityStep: 'Step 5 of 6 — Religion & Community',
   faithCommunityTitle: 'Faith & Community',
-  faithCommunitySubtitle:
-    'Optional — helps find culturally compatible matches',
+  faithCommunitySubtitle: 'Optional — helps find culturally compatible matches',
   selectReligionPlaceholder: 'Select religion',
   communityCasteLabel: 'Community / Caste',
   communityCastePlaceholder: 'e.g. Sunni, Brahmin, Punjabi',
@@ -235,8 +234,7 @@ export const Strings = {
   showingProfiles: 'Showing {count} profiles',
   viewProfile: 'View Profile',
   filterMatches: 'Filter Matches',
-  filterMatchesSubtitle:
-    'Refine your matches to find the perfect partner',
+  filterMatchesSubtitle: 'Refine your matches to find the perfect partner',
   reset: 'Reset',
   ageRange: 'Age Range',
   locationLabel: 'Location',
@@ -401,6 +399,7 @@ export const Strings = {
   editProfileNotice:
     'Your information is safe and only shared with matches you approve.',
   saveChanges: 'Save Changes',
+  profileSaved: 'Profile updated successfully.',
   selectLanguage: 'Select language',
   community: 'Community',
   heightUnitFt: 'ft',
@@ -445,8 +444,7 @@ export const Strings = {
   cardNumber: 'Card Number',
   expiryDate: 'Date of Expiry',
   cvv: 'CVV',
-  paymentSecureNotice:
-    'Your payment is 256-bit SSL encrypted and 100% secure.',
+  paymentSecureNotice: 'Your payment is 256-bit SSL encrypted and 100% secure.',
   payNow: 'Pay Now',
   yourePremiumNow: "You're Premium Now!",
   premiumWelcomeMessage:

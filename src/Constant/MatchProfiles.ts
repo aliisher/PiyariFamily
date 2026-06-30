@@ -21,6 +21,8 @@ export type ProfileDetail = {
   age: number;
   location: string;
   image: ImageSourcePropType;
+  tier: 'VIP' | 'VVIP';
+  isVerified: boolean;
   about: string;
   quickInfo: QuickInfo[];
   basicDetails: BasicDetail[];
@@ -35,6 +37,8 @@ export const PROFILE_DETAILS: Record<string, ProfileDetail> = {
     age: 26,
     location: 'Lahore',
     image: Images.femaleProfile,
+    tier: 'VIP',
+    isVerified: true,
     about:
       'I am a family-oriented person who values honesty, kindness, and meaningful connections. I enjoy reading, traveling, and spending quality time with loved ones. Looking for a life partner who shares similar values and dreams of building a beautiful future together.',
     quickInfo: [
@@ -77,6 +81,8 @@ export const PROFILE_DETAILS: Record<string, ProfileDetail> = {
     age: 29,
     location: 'Karachi',
     image: Images.maleProfile,
+    tier: 'VVIP',
+    isVerified: true,
     about:
       'Software engineer with a passion for technology and travel. I believe in balancing career ambitions with family values. Seeking a partner who is kind, ambitious, and ready to build a meaningful life together.',
     quickInfo: [
