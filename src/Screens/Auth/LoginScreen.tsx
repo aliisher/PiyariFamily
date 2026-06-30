@@ -21,6 +21,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { authService, getApiErrorMessage, isSuccessStatus } from '../../API';
 import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
@@ -36,17 +37,31 @@ const LoginScreen = ({ navigation }: Props) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       Toast.show('Please fill in all fields');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await authService.login({
+        email: email.trim(),
+        password,
+      });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Login successful');
+        navigation.replace('SelectCountry');
+        return;
+      }
+
+      Toast.show(response.message || 'Login failed. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    } finally {
       setLoading(false);
-      Toast.show('Login successfull');
-      navigation.replace('SelectCountry');
-    }, 1000);
+    }
   };
 
   return (

@@ -31,11 +31,11 @@ export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   SignUp: undefined;
-  VerifyEmail: undefined;
+  VerifyEmail: { email: string };
   ForgotPassword: undefined;
-  CheckEmail: { email?: string };
-  CodeVerified: undefined;
-  SetNewPassword: undefined;
+  CheckEmail: { email: string };
+  CodeVerified: { email: string };
+  SetNewPassword: { email: string };
   PasswordResetSuccess: undefined;
   WelcomeBack: undefined;
   SelectCountry: undefined;

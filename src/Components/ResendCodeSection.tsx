@@ -7,7 +7,7 @@ import { Fonts } from '../Constant/Fonts';
 import { fs, hp, wp } from '../Functions/responsive';
 
 type Props = {
-  initialSeconds?: number;
+  cooldownSeconds?: number;
   onResend?: () => void;
 };
 
@@ -17,9 +17,13 @@ const formatTime = (seconds: number) => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-const ResendCodeSection = ({ initialSeconds = 45, onResend }: Props) => {
-  const [seconds, setSeconds] = useState(initialSeconds);
+const ResendCodeSection = ({ cooldownSeconds = 45, onResend }: Props) => {
+  const [seconds, setSeconds] = useState(cooldownSeconds);
   const canResend = seconds === 0;
+
+  useEffect(() => {
+    setSeconds(cooldownSeconds);
+  }, [cooldownSeconds]);
 
   useEffect(() => {
     if (seconds <= 0) {
@@ -37,7 +41,6 @@ const ResendCodeSection = ({ initialSeconds = 45, onResend }: Props) => {
     if (!canResend) {
       return;
     }
-    setSeconds(initialSeconds);
     onResend?.();
   };
 

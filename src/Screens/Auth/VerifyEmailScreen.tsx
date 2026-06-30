@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
 import AuthBackground from '../../Components/AuthBackground';
@@ -19,6 +20,8 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { authService, getApiErrorMessage, isSuccessStatus } from '../../API';
+import { AuthStackParamList } from '../../Navigation/AuthNavigator';
 import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
@@ -28,21 +31,57 @@ type Props = {
   };
 };
 
+type VerifyEmailRoute = RouteProp<AuthStackParamList, 'VerifyEmail'>;
+
 const VerifyEmailScreen = ({ navigation }: Props) => {
+  const route = useRoute<VerifyEmailRoute>();
+  const email = route.params.email;
+
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(45);
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (code.length !== 6) {
       Toast.show('Please enter the 6-digit code');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await authService.verifyEmailOtp({
+        email,
+        otp: code,
+      });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Email verified successfully');
+        navigation.replace('Login');
+        return;
+      }
+
+      Toast.show(response.message || 'Verification failed. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    } finally {
       setLoading(false);
-      Toast.show('Email verified successfully');
-      navigation.replace('Login');
-    }, 1000);
+    }
+  };
+
+  const handleResend = async () => {
+    try {
+      const response = await authService.resendEmailOtp({ email });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Verification code resent');
+        setResendCooldown(response.resend_after_seconds ?? 45);
+        return;
+      }
+
+      Toast.show(response.message || 'Failed to resend code. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    }
   };
 
   return (
@@ -67,7 +106,8 @@ const VerifyEmailScreen = ({ navigation }: Props) => {
             <OtpCodeInput value={code} onChangeText={setCode} />
 
             <ResendCodeSection
-              onResend={() => Toast.show('Verification code resent')}
+              cooldownSeconds={resendCooldown}
+              onResend={handleResend}
             />
 
             <View style={styles.flexSpacer} />

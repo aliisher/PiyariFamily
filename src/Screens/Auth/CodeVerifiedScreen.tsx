@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthBackground from '../../Components/AuthBackground';
 import AuthSoftGlow from '../../Components/AuthSoftGlow';
@@ -9,15 +10,20 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { AuthStackParamList } from '../../Navigation/AuthNavigator';
 import { fs, hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
-    navigate: (screen: string) => void;
+    navigate: (screen: string, params?: { email: string }) => void;
   };
 };
 
+type CodeVerifiedRoute = RouteProp<AuthStackParamList, 'CodeVerified'>;
+
 const CodeVerifiedScreen = ({ navigation }: Props) => {
+  const route = useRoute<CodeVerifiedRoute>();
+  const email = route.params.email;
   return (
     <AuthBackground variant="white">
       <AuthSoftGlow />
@@ -49,7 +55,7 @@ const CodeVerifiedScreen = ({ navigation }: Props) => {
         <View style={styles.bottomSection}>
           <PrimaryButton
             title={Strings.setNewPassword}
-            onPress={() => navigation.navigate('SetNewPassword')}
+            onPress={() => navigation.navigate('SetNewPassword', { email })}
             showArrow
             style={styles.button}
           />

@@ -20,26 +20,27 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { authService, getApiErrorMessage, isSuccessStatus } from '../../API';
 import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
   navigation: {
     goBack: () => void;
-    navigate: (screen: string) => void;
+    navigate: (screen: string, params?: { email: string }) => void;
   };
 };
 
 const SignUpScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [agreed, setAgreed] = useState(false);
+  const [fullName, setFullName] = useState('ali');
+  const [email, setEmail] = useState('alisher6269@gmail.com');
+  const [phoneNumber, setPhoneNumber] = useState('+998991234567');
+  const [password, setPassword] = useState('12345678');
+  const [confirmPassword, setConfirmPassword] = useState('12345678');
+  const [agreed, setAgreed] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (
       !fullName.trim() ||
       !email.trim() ||
@@ -58,12 +59,29 @@ const SignUpScreen = ({ navigation }: Props) => {
       Toast.show('Please agree to Terms & Privacy Policy');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await authService.register({
+        name: fullName.trim(),
+        email: email.trim(),
+        phone: phoneNumber.trim(),
+        password,
+        password_confirmation: confirmPassword,
+      });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Account created successfully');
+        navigation.navigate('VerifyEmail', { email: email.trim() });
+        return;
+      }
+
+      Toast.show(response.message || 'Registration failed. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    } finally {
       setLoading(false);
-      Toast.show('Account created successfully');
-      navigation.navigate('VerifyEmail');
-    }, 1000);
+    }
   };
 
   return (

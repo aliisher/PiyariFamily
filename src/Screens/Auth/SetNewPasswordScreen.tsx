@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-simple-toast';
@@ -21,6 +21,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { authService, getApiErrorMessage, isSuccessStatus } from '../../API';
 import { AuthStackParamList } from '../../Navigation/AuthNavigator';
 import { fs, hp, wp } from '../../Functions/responsive';
 
@@ -28,6 +29,8 @@ type NavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
   'SetNewPassword'
 >;
+
+type SetNewPasswordRoute = RouteProp<AuthStackParamList, 'SetNewPassword'>;
 
 const isPasswordValid = (password: string) =>
   password.length >= 8 &&
@@ -37,11 +40,14 @@ const isPasswordValid = (password: string) =>
 
 const SetNewPasswordScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<SetNewPasswordRoute>();
+  const email = route.params.email;
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (!password || !confirmPassword) {
       Toast.show('Please fill in all fields');
       return;
@@ -54,11 +60,26 @@ const SetNewPasswordScreen = () => {
       Toast.show('Passwords do not match');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await authService.setNewPassword({
+        email,
+        password,
+      });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Password updated successfully');
+        navigation.replace('PasswordResetSuccess');
+        return;
+      }
+
+      Toast.show(response.message || 'Failed to reset password. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    } finally {
       setLoading(false);
-      navigation.replace('PasswordResetSuccess');
-    }, 1000);
+    }
   };
 
   return (

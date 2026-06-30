@@ -1,16 +1,56 @@
-const BASE_URL = '';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { API_CONFIG } from './config';
+import { toFormData } from './formData';
+import { tokenStorage } from './tokenStorage';
+import type { ApiErrorResponse, ApiResult } from './types';
+
+const axiosInstance = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
+  timeout: API_CONFIG.TIMEOUT,
+  headers: {
+    Accept: 'application/json',
+  },
+});
+
+axiosInstance.interceptors.request.use(config => {
+  const token = tokenStorage.getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  response => response,
+  (error: AxiosError<ApiErrorResponse>) => {
+    if (error.response?.status === 401) {
+      tokenStorage.clear();
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export const apiClient = {
-  get: async <T>(endpoint: string): Promise<T> => {
-    const response = await fetch(`${BASE_URL}${endpoint}`);
-    return response.json();
-  },
-  post: async <T>(endpoint: string, body: unknown): Promise<T> => {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    return response.json();
-  },
+  postForm: <T>(
+    url: string,
+    data: Record<string, string | number>,
+    config?: AxiosRequestConfig,
+  ): Promise<ApiResult<T>> =>
+    axiosInstance
+      .post<T>(url, toFormData(data), config)
+      .then(response => ({
+        status: response.status,
+        data: response.data,
+      })),
+
+  get: <T>(url: string, config?: AxiosRequestConfig) =>
+    axiosInstance.get<T>(url, config).then(response => response.data),
+
+  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    axiosInstance.post<T>(url, data, config).then(response => response.data),
 };
+
+export { axiosInstance };

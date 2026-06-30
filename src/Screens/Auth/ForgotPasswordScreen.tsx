@@ -19,6 +19,7 @@ import { AuthStyles, FontSizes } from '../../Constant/AuthStyles';
 import { Colors } from '../../Constant/Colors';
 import { Fonts } from '../../Constant/Fonts';
 import { Strings } from '../../Constant/Strings';
+import { authService, getApiErrorMessage, isSuccessStatus } from '../../API';
 import { hp, wp } from '../../Functions/responsive';
 
 type Props = {
@@ -32,16 +33,30 @@ const ForgotPasswordScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (!email.trim()) {
       Toast.show('Please enter your email address');
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const response = await authService.forgotPassword({
+        email: email.trim(),
+      });
+
+      if (isSuccessStatus(response.status) && response.success) {
+        Toast.show(response.message || 'Reset code sent to your email');
+        navigation.navigate('CheckEmail', { email: email.trim() });
+        return;
+      }
+
+      Toast.show(response.message || 'Failed to send reset code. Please try again.');
+    } catch (error) {
+      Toast.show(getApiErrorMessage(error));
+    } finally {
       setLoading(false);
-      navigation.navigate('CheckEmail', { email: email.trim() });
-    }, 1000);
+    }
   };
 
   return (
